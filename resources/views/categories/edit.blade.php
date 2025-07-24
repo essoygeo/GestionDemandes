@@ -1,7 +1,7 @@
-@extends('templates.dashboard')
+@extends('layouts.app')
 @section('title','modifier categoreie')
 @section('content')
-    <div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div class="d-flex justify-content-center align-items-center bg-light">
         <div class="card shadow p-4" style="width: 100%; max-width: 1000px;">
             <h3 class="text-center mb-4"> Formulaire de modification</h3>
 
@@ -15,7 +15,7 @@
                 </div>
 
 
-                <button type="submit" class="btn  btn-violet w-100" >
+                <button type="submit" class="btn btn-success w-100" >
                     modifier
                 </button>
             </form>

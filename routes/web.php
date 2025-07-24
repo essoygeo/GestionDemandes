@@ -9,6 +9,7 @@ use App\Http\Controllers\ComptableController;
 use App\Http\Controllers\controlDashbordController;
 use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\EmployeController;
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\RessourceController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -41,14 +42,20 @@ Route::middleware('auth')->group(function (){
     Route::get('/demande/{demande}/commentaires', [CommentaireController::class, 'show'])->name('show.commentaires');
     Route::post('/demande/{demande}/commentaires', [CommentaireController::class, 'store'])->name('store.commentaires');
 //Ressources(commun)
-    Route::get('/create/demande/{demande?}/ressource/', [RessourceController::class, 'create'])->name('create.ressources');
-    Route::get('/create/ressource/', [RessourceController::class, 'create'])->name('create.ressourcesSimples');
+    //Route::get('/create/demande/{demande?}/ressource/', [RessourceController::class, 'create'])->name('create.ressources');
+   // Route::get('/create/ressource/', [RessourceController::class, 'create'])->name('create.ressourcesSimples');
     Route::post('/store/ressource', [RessourceController::class, 'store'])->name('store.ressources');
     Route::get('/index/ressource', [RessourceController::class, 'index'])->name('index.ressources');
     Route::get('/show/ressource/{ressource}', [RessourceController::class, 'show'])->name('show.ressources');
     Route::get('/edit/ressource/{ressource}', [RessourceController::class, 'edit'])->name('edit.ressources');
     Route::put('/edit/ressource/{ressource}', [RessourceController::class, 'update'])->name('update.ressources');
     Route::DELETE('/destroy/ressource/{ressource}', [RessourceController::class, 'destroy'])->name('destroy.ressources');
+
+// voir son profile(commun)
+    Route::get('/show/user/{user}', [AdminController::class, 'show'])->name('show.users');
+    //resetPassword(commun)
+    Route::get('/edit/password', [PasswordController::class, 'edit'])->name('edit.password');
+    Route::put('/update/password', [PasswordController::class, 'update'])->name('update.password');
 });
 
 
@@ -58,7 +65,6 @@ Route::middleware('checkrole:Admin')->group(function (){
     Route::get('/admin/create/user', [AdminController::class, 'create'])->name('create.users');
     Route::post('/admin/store/user', [AdminController::class, 'store'])->name('store.users');
     Route::get('/admin/index/user', [AdminController::class, 'index'])->name('index.users');
-    Route::get('/admin/show/user/{user}', [AdminController::class, 'show'])->name('show.users');
     Route::get('/admin/edit/user/{user}', [AdminController::class, 'edit'])->name('edit.users');
     Route::put('/admin/edit/user/{user}', [AdminController::class, 'update'])->name('update.users');
     Route::DELETE('/admin/destroy/user/{user}', [AdminController::class, 'destroy'])->name('destroy.users');

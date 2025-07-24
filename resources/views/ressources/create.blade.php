@@ -2,7 +2,7 @@
 @section('title','creer une ressource')
 @section('content')
 
-    <div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div class=" d-flex justify-content-center align-items-center bg-light">
         <div class="card shadow p-4" style="width: 100%; max-width: 1000px;">
             <h3 class="text-center mb-4"> Formulaire de creation</h3>
 
@@ -72,7 +72,7 @@
                 const dmSelect = select.options[select.selectedIndex]
                 const typeCateg = dmSelect.getAttribute('data-categorie');
 
-                if (typeCateg.toLowerCase() == 'logicielles') {
+                if (typeCateg.toLowerCase() === 'logicielles') {
                    model_div.style.display = 'none';
                    marque_div.style.display = 'none';
                     model.value = '';

@@ -8,6 +8,6 @@ class ComptableController extends Controller
 {
     public function comptableDashboard()
     {
-        return view('dashboard.dashboard');
+        return view('welcome.welcome');
     }
 }

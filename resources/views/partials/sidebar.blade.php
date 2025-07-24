@@ -1,148 +1,157 @@
-<h5 class=" text-center text-primary-emphasis fw-bold mb-4"><i class="fa-solid fa-bars"></i> MENU</h5>
+<ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
 
-@if(Auth::user()->role ==='Admin')
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-clipboard-list"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Gestion demandes</div>
+    </a>
 
-    <ul class="nav flex-column ">
-        <li class="nav-item border-bottom">
+    <hr class="sidebar-divider my-0">
 
-            <a href="{{ route('create.users') }}"
-               class="nav-link   text-primary-emphasis hover-bg fw-semibold rounded px-3 py-2">
-                <i class="fa-solid fa-user-plus"></i> Nouvel utilisateur
-            </a>
-        </li>
-        <li class="nav-item border-bottom">
-            <a href="{{route('index.users')}}"
-               class="nav-link  fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-                <i class="fa-solid fa-users"></i> Tous les utilisateurs
-            </a>
-        </li>
-        <li class="nav-item border-bottom">
-            <a href="{{route('create.categories')}}"
-               class="nav-link fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-                <i class="fa-solid fa-layer-group"></i> Nouvelle categorie
-            </a>
-        </li>
-        <li class="nav-item border-bottom">
-            <a href="{{route('index.categories')}}"
-               class="nav-link fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-                <i class="fa-solid fa-layer-group"></i> Toutes les categories
-            </a>
-        </li>
-        <li class="nav-item border-bottom">
-            <a href="{{route('create.demandes')}}"
-               class="nav-link fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-                <i class="fa-solid fa-plus"></i> Nouvelle demande
-            </a>
-        </li>
-        <li class="nav-item border-bottom">
-            <a href="{{route('index.demandes')}}"
-               class="nav-link fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-                <i class="fa-solid fa-bell"></i> Toutes les demandes
-            </a>
-        </li>
-        <li class="nav-item border-bottom">
-            <a href="{{route('indexAdmin.demandes')}}"
-               class="nav-link  fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-                <i class="fa-solid  fa-bell"></i> Mes demandes
-            </a>
-        </li>
-        <li class="nav-item border-bottom">
-            <a href="{{route('create.ressourcesSimples')}}"
-               class="nav-link  fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-                <i class="fa-solid  fa-plus"></i> Nouvelle ressource
-            </a>
-        </li>
-        <li class="nav-item border-bottom">
-            <a href="{{route('index.demandes')}}"
-               class="nav-link  fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-                <i class="fa-solid   fa-folder"></i> Toutes les ressources
-            </a>
-        </li>
-        <li class="nav-item border-bottom">
-            <a href="{{route('index.users')}}"
-               class="nav-link  fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-                <i class="fa-solid   fa-folder"></i> Mes ressources
-            </a>
-        </li>
-    </ul>
-    {{--comptable--}}
-
-@elseif(Auth::user()->role ==='Comptable')
-    <ul class="nav flex-column ">
-    <li class="nav-item border-bottom">
-        <a href="{{route('create.demandes')}}"
-           class="nav-link fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-            <i class="fa-solid fa-plus"></i> Nouvelle demande
+    <!-- Dashboard -->
+    <li class="nav-item">
+        <a class="nav-link" href="#">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
         </a>
     </li>
 
-    <li class="nav-item border-bottom">
-        <a href="{{route('index.demandes')}}"
-           class="nav-link  fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-            <i class="fa-solid  fa-bell"></i> Toutes les demandes
-        </a>
-    </li>
-    <li class="nav-item border-bottom">
-        <a href="{{route('indexComptable.demandes')}}"
-           class="nav-link  fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-            <i class="fa-solid  fa-bell"></i> Mes demandes
-        </a>
-    </li>
-    <li class="nav-item border-bottom">
-        <a href="{{route('create.ressourcesSimples')}}"
-           class="nav-link  fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-            <i class="fa-solid   fa-plus"></i> Nouvelle ressource
-        </a>
-    </li>
-    <li class="nav-item border-bottom">
-        <a href="{{route('indexAdmin.demandes')}}"
-           class="nav-link  fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-            <i class="fa-solid   fa-folder"></i> Toutes les ressources
-        </a>
-    </li>
-    <li class="nav-item border-bottom">
-        <a href="{{route('index.users')}}"
-           class="nav-link  fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-            <i class="fa-solid   fa-folder"></i> Mes ressources
-        </a>
-    </li>
-        <li class="nav-item border-bottom">
-            <a href="{{route('index.users')}}"
-               class="nav-link  fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-                <i class="fa-solid  fa-money-bill"></i> Caisse
-            </a>
-        </li>
-    </ul>
+    <hr class="sidebar-divider">
+    <div class="sidebar-heading">Interface</div>
 
-{{---employe--}}
-
-@elseif(Auth::user()->role ==='Employe')
-    <ul class="nav flex-column ">
-        <li class="nav-item border-bottom">
-            <a href="{{route('create.demandes')}}"
-               class="nav-link fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-                <i class="fa-solid fa-plus"></i> Nouvelle demande
+    <!-- Admin Section -->
+    @if(Auth::user()->role === 'Admin')
+        <!-- Utilisateurs -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers"
+               aria-expanded="true" aria-controls="collapseUsers">
+                <i class="fas fa-fw fa-user"></i>
+                <span>Utilisateurs</span>
             </a>
+            <div id="collapseUsers" class="collapse" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Actions :</h6>
+                    <a class="collapse-item" href="{{ route('create.users') }}">Nouvel utilisateur</a>
+                    <a class="collapse-item" href="{{ route('index.users') }}">Tous les utilisateurs</a>
+                </div>
+            </div>
         </li>
 
-        <li class="nav-item border-bottom">
-            <a href="{{route('indexEmploye.demandes')}}"
-               class="nav-link  fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-                <i class="fa-solid  fa-bell"></i> Mes demandes
+        <!-- Catégories -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCategories"
+               aria-expanded="true" aria-controls="collapseCategories">
+                <i class="fas fa-tags"></i>
+                <span>Catégories</span>
             </a>
+            <div id="collapseCategories" class="collapse" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Actions :</h6>
+                    <a class="collapse-item" href="{{ route('create.categories') }}">Nouvelle catégorie</a>
+                    <a class="collapse-item" href="{{ route('index.categories') }}">Toutes les catégories</a>
+                </div>
+            </div>
         </li>
-        <li class="nav-item border-bottom">
-            <a href="{{route('create.ressourcesSimples')}}"
-               class="nav-link  fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-                <i class="fa-solid   fa-plus"></i> Nouvelle ressource
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDemandesAdmin"
+               aria-expanded="true" aria-controls="collapseDemandesAdmin">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Demandes</span>
             </a>
+            <div id="collapseDemandesAdmin" class="collapse" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Actions :</h6>
+                    <a class="collapse-item" href="{{ route('create.demandes') }}">Nouvelle demande</a>
+                    <a class="collapse-item" href="{{ route('index.demandes') }}">Toutes les demandes</a>
+                    <a class="collapse-item" href="{{ route('indexAdmin.demandes') }}">Mes demandes</a>
+                </div>
+            </div>
         </li>
-        <li class="nav-item border-bottom">
-            <a href="{{route('index.users')}}"
-               class="nav-link  fw-semibold text-primary-emphasis hover-bg rounded px-3 py-2">
-                <i class="fa-solid   fa-folder"></i> Mes ressources
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRessourcesAdmin"
+               aria-expanded="true" aria-controls="collapseRessourcesAdmin">
+                <i class="fas fa-briefcase"></i>
+                <span>Ressources</span>
             </a>
+            <div id="collapseRessourcesAdmin" class="collapse" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Actions :</h6>
+                    <a class="collapse-item" href="{{ route('create.demandes') }}">Nouvelle ressource</a>
+                    <a class="collapse-item" href="{{ route('index.demandes') }}">Toutes les ressorces</a>
+                </div>
+            </div>
+        </li>
+    @endif
+
+    <!-- Comptable Section -->
+    @if(Auth::user()->role === 'Comptable')
+        <!-- Demandes -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDemandesComptable"
+               aria-expanded="true" aria-controls="collapseDemandesComptable">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Demandes</span>
+            </a>
+            <div id="collapseDemandesComptable" class="collapse" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Actions :</h6>
+                    <a class="collapse-item" href="{{ route('create.demandes') }}">Nouvelle demande</a>
+                    <a class="collapse-item" href="{{ route('index.demandes') }}">Toutes les demandes</a>
+                    <a class="collapse-item" href="{{ route('indexComptable.demandes') }}">Mes demandes</a>
+                </div>
+            </div>
         </li>
 
-    </ul>
-@endif
+        <!-- Caisse -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCaisse"
+               aria-expanded="true" aria-controls="collapseCaisse">
+                <i class="fas fa-wallet"></i>
+                <span>Caisse</span>
+            </a>
+            <div id="collapseCaisse" class="collapse" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Actions :</h6>
+                    <a class="collapse-item" href="{{ route('create.demandes') }}">Créer une caisse</a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('create.demandes') }}">
+                <i class="fas fa-briefcase"></i> <span>Nouvelle ressource</span>
+            </a>
+        </li>
+    @endif
+
+    <!-- Employé Section -->
+    @if(Auth::user()->role === 'Employe')
+        <!-- Demandes -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDemandesEmploye"
+               aria-expanded="true" aria-controls="collapseDemandesEmploye">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Demandes</span>
+            </a>
+            <div id="collapseDemandesEmploye" class="collapse" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Actions :</h6>
+                    <a class="collapse-item" href="{{ route('create.demandes') }}">Nouvelle demande</a>
+                    <a class="collapse-item" href="{{ route('indexEmploye.demandes') }}">Mes demandes</a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('create.demandes') }}">
+                <i class="fas fa-briefcase"></i> <span>Nouvelle ressource</span>
+            </a>
+        </li>
+    @endif
+
+    <hr class="sidebar-divider d-none d-md-block">
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>

@@ -1,36 +1,57 @@
-@extends('templates.layout')
+@extends('layouts.appLogin')
 
-@section('title', 'Connexion')
+
 
 @section('content')
-    <div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
-        <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
-            <h3 class="text-center mb-4">Connexion</h3>
+    <div class="row justify-content-center">
 
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
+        <div class="col-xl-10 col-lg-12 col-md-9">
 
-                <div class="mb-3">
-                    <label for="email" class="form-label">Adresse email</label>
-                    <input type="email" class="form-control" name="email" id="email" required autofocus>
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                        <div class="col-lg-6">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4">Bienvenu sur Gestion des demandes</h1>
+                                </div>
+                                <form method="POST" action="{{ route('login') }}">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="email" class="form-label">Adresse email</label>
+                                        <input type="email" class="form-control" name="email" id="email" required autofocus>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password" class="form-label">Mot de passe</label>
+                                        <input type="password" class="form-control" name="password" id="password" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox small">
+                                            <input type="checkbox" class="custom-control-input" id="remember" name="remember">
+                                            <label class="custom-control-label" for="remember">Se souvenir de moi
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <a  class="btn btn-primary btn-user btn-block">
+                                        Se connecter
+                                    </a>
+                                    <hr>
+
+                                </form>
+                                <hr>
+                                <div class="text-center">
+                                    <a class="small" href="forgot-password.html">Forgot Password?</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div class="mb-3">
-                    <label for="password" class="form-label">Mot de passe</label>
-                    <input type="password" class="form-control" name="password" id="password" required>
-                </div>
-
-                <div class="mb-3 form-check">
-                    <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                    <label class="form-check-label" for="remember">
-                        Se souvenir de moi
-                    </label>
-                </div>
-
-                <button type="submit" class="btn  btn-violet w-100" >
-                    se connecter
-                </button>
-            </form>
         </div>
+
     </div>
 @endsection

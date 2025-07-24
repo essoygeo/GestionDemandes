@@ -1,12 +1,12 @@
-@extends('templates.dashboard')
+@extends('layouts.app')
 @section('title','details utililsateur')
 @section('content')
 
 
 
-    <div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div class="d-flex justify-content-center align-items-center bg-light">
         <div class="card shadow p-4" style="width: 100%; max-width: 1000px;">
-            <h3 class="text-center mb-4"><span class="violet">Details de l'utilisateur {{$user->nom}}</span>
+            <h3 class="text-center mb-4"><span>Details de l'utilisateur {{$user->nom}}</span>
             </h3>
 
             <form>
@@ -53,7 +53,7 @@
                     </label>
                 </div>
                 <div class="mb-3">
-                    <a href="javascript:history.back()" class="btn btn-violet w-100">
+                    <a href="javascript:history.back()" class="btn btn-success w-100">
                         <i class="fas fa-arrow-left"></i> retour
                     </a>
                 </div>

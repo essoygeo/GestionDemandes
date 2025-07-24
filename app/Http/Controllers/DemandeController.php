@@ -11,10 +11,16 @@ use Illuminate\Support\Facades\Hash;
 
 class DemandeController extends Controller
 {
-    public function create()
+    public function create(Request $request)
     {
         $categories = Categorie::all();
-        return view('demandes.create', compact('categories'));
+        $demandes = Demande::where('status', 'En attente')->get();
+        $demandeSelectione = null;
+        if ($request->has('demande_id')) {
+            $demandeSelectione = Demande::find($request->demande_id);
+        }
+
+        return view('demandes.create', compact('categories', 'demandes', 'demandeSelectione'));
     }
 
     public function store(Request $request)
@@ -51,8 +57,8 @@ class DemandeController extends Controller
 //        ->with('success', 'demande créee avec sucess');
 
 
-               return redirect()->route('create.ressources',['demande'=>$demande->id])->with('success', 'Demande créee avec succès')
-                   ->with('warning','veuillez creer la/les ressources associée(s) à cette demande');
+               return redirect()->route('create.demandes',['demande'=>$demande->id])->with('success', 'Demande créee avec succès')
+                   ->with('warning','veuillez ajouter la/les ressources associée(s) à cette demande');
 
 
 

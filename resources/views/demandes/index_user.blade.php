@@ -1,11 +1,11 @@
-@extends('templates.dashboard')
+@extends('layouts.app')
 @section('title','Liste de mes demandes')
 
 @section('content')
     <div class="card shadow-sm border-0">
         <div class="card-header bg-white">
             <h5 class="mb-3">Liste de mes demandes</h5>
-            <a class="mb-0 btn btn-sm btn-outline-violet " href="{{route('create.demandes')}}">+ Creer demande</a>
+            <a class="mb-0 btn btn-sm btn-outline-success " href="{{route('create.demandes')}}">+ Creer demande</a>
         </div>
         <div class="card-body">
 
@@ -14,7 +14,7 @@
                 <input type="text" id="searchInput" class="form-control" placeholder=" Rechercher...">
             </div>
 
-            <div class="table-responsive">
+            <div class="table-responsive" style="overflow: visible;">
                 <table class="table table-hover align-middle" id="dataTable">
                     <thead class="table-light">
                     <tr>
@@ -42,7 +42,7 @@
                                 <div class="d-flex flex-column justify-content-center align-items-center">
                                     <span class="text-truncate "
                                           style="max-width: 220px;">{{ Str::limit($demande->titre, 30) }}</span>
-                                    <a href="" class="violet"
+                                    <a href="" class="text-success-emphasis"
                                        data-bs-toggle="modal"
                                        data-bs-target="#titreModal{{ $demande->id }}">
                                         <small>Lire plus</small>
@@ -54,7 +54,7 @@
                                      aria-labelledby="titreModalLabel{{ $demande->id }}" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-scrollable">
                                         <div class="modal-content">
-                                            <div class="modal-header bg-violet text-white">
+                                            <div class="modal-header bg-success-subtle text-white">
                                                 <h5 class="modal-title" id="titreModalLabel{{ $demande->id }}">Titre
                                                     complet</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -71,7 +71,7 @@
                                 <div class="d-flex flex-column justify-content-center align-items-center">
                                     <span class="text-truncate"
                                           style="max-width: 220px;">{{ Str::limit($demande->raison, 30) }}</span>
-                                    <a class="violet"
+                                    <a class="text-success-emphasis"
                                        href="#"
                                        data-bs-toggle="modal"
                                        data-bs-target="#raisonModal{{ $demande->id }}">
@@ -86,7 +86,7 @@
                                      aria-labelledby="raisonModalLabel{{ $demande->id }}" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-scrollable">
                                         <div class="modal-content">
-                                            <div class="modal-header bg-violet text-white">
+                                            <div class="modal-header bg-success-subtle text-white">
                                                 <h5 class="modal-title" id="raisonModalLabel{{ $demande->id }}">Raison
                                                     complète</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -98,8 +98,8 @@
                                 </div>
                             </td>
 
-                            <td>{{ $demande->type }}</td>
-                            <td>
+                            <td class="text-center align-middle">{{ $demande->type }}</td>
+                            <td class="text-center align-middle">
                                 @if($demande->type ==='En stock')
                                     <small class="text-primary-emphasis">pas de coût</small>
                                 @else
@@ -107,10 +107,10 @@
                                 @endif
 
                             </td>
-                            <td>{{ $demande->date }}</td>
-                            <td>
+                            <td class="text-center align-middle">{{ $demande->date }}</td>
+                            <td class="text-center align-middle">
                                 @if($demande->status === 'En attente')
-                                    <span class="badge bg-dark">{{ $demande->status }}</span>
+                                    <span class="badge bg-warning">{{ $demande->status }}</span>
                                 @elseif($demande->status === 'Refusé')
                                     <span class="badge bg-danger">{{ $demande->status }}</span>
                                 @else
@@ -118,8 +118,8 @@
                                 @endif
                             </td>
                             <td class="text-center align-middle">
-                                <div class="dropdown">
-                                    <button class="btn btn-outline-violet btn-sm dropdown-toggle" type="button"
+                                <div class="dropup">
+                                    <button class="btn btn-outline-success btn-sm dropdown-toggle" type="button"
                                             data-bs-toggle="dropdown">
                                         Actions
                                     </button>
@@ -127,13 +127,13 @@
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     @if($demande->status ==='En attente')
                                         <li>
-                                            <a class="dropdown-item violet" href="{{ route('show.demandes', $demande->id) }}">
-                                                <i class="fa-solid fa-eye me-1 violet"></i> Voir
+                                            <a class="dropdown-item " href="{{ route('show.demandes', $demande->id) }}">
+                                                <i class="fa-solid fa-eye me-1 text-success"></i> Voir
                                             </a>
                                         </li>
                                         <li >
-                                            <a class="dropdown-item violet" href="{{ route('edit.demandes', $demande->id) }}">
-                                                <i class="fas fa-edit me-1 violet"></i> Modifier
+                                            <a class="dropdown-item " href="{{ route('edit.demandes', $demande->id) }}">
+                                                <i class="fas fa-edit me-1 text-success"></i> Modifier
                                             </a>
                                         </li>
                                         <li>
@@ -160,8 +160,8 @@
 
                                     @endif
                                         <li>
-                                            <a class="dropdown-item text-secondary" href="{{ route('show.commentaires', $demande->id) }}">
-                                                <i class="fas fa-comments me-1 "></i> Commenter
+                                            <a class="dropdown-item " href="{{ route('show.commentaires', $demande->id) }}">
+                                                <i class="fas fa-comments me-1 text-success "></i> Commenter
                                             </a>
                                         </li>
                                 </ul>

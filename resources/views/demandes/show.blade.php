@@ -1,11 +1,11 @@
-@extends('templates.dashboard')
+@extends('layouts.app')
 
 @section('content')
     <div class="container">
 
         {{-- DÉTAILS DE LA DEMANDE --}}
         <div class="card mb-4">
-            <div class="card-header bg-violet">Détails de la Demande</div>
+            <div class="card-header bg-success-subtle">Détails de la Demande</div>
             <div class="card-body row">
 
                 <div class="col-md-6 mb-3">
@@ -68,7 +68,7 @@
 
         {{-- COMMENTAIRES --}}
         <div class="card mb-4">
-            <div class="card-header bg-violet ">Commentaires</div>
+            <div class="card-header bg-success-subtle ">Commentaires</div>
             <div class="card-body">
                 @forelse ($demande->commentaires as $commentaire)
                     <div class="mb-3 border-bottom pb-2">
@@ -83,8 +83,8 @@
         </div>
 
         {{-- AJOUTER UN COMMENTAIRE --}}
-        <div class="card">
-            <div class="card-header bg-violet">Ajouter un commentaire</div>
+        <div class="card mb-4">
+            <div class="card-header bg-success-subtle">Ajouter un commentaire</div>
             <div class="card-body">
                 <form action="{{ route('store.commentaires', $demande->id) }}" method="POST">
                     @csrf
@@ -92,7 +92,7 @@
                         <label for="contenu" class="form-label">Votre commentaire</label>
                         <textarea name="contenu" id="contenu" class="form-control" rows="3" required></textarea>
                     </div>
-                    <button class="btn btn-outline-violet">Envoyer</button>
+                    <button class="btn btn-outline-secondary">Envoyer</button>
                 </form>
             </div>
         </div>

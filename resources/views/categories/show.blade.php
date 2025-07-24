@@ -1,9 +1,9 @@
-@extends('templates.dashboard')
+@extends('layouts.app')
 @section('title','details categorie')
 @section('content')
-    <div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div class=" d-flex justify-content-center align-items-center  bg-light">
         <div class="card shadow p-4" style="width: 100%; max-width: 1000px;">
-            <h3 class="text-center mb-4"><span style="color: #6f42c1">Details de la categorie {{$categorie->nom}}</span>
+            <h3 class="text-center mb-4"><span>Details de la categorie {{$categorie->nom}}</span>
             </h3>
 
             <form>
@@ -20,7 +20,7 @@
                            value="{{$categorie->user->nom}}" placeholder="saisir nom categorie" readonly>
                 </div>
                 <div class="mb-3">
-                    <a href="javascript:history.back()" class="btn btn-violet w-100">
+                    <a href="javascript:history.back()" class="btn btn-success w-100">
                         <i class="fas fa-arrow-left"></i> retour
                     </a>
                 </div>

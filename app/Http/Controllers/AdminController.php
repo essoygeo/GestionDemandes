@@ -10,7 +10,7 @@ class AdminController extends Controller
 {
     public function adminDashboard()
     {
-        return view('dashboard.dashboard');
+        return view('welcome.welcome');
     }
 
 //crud user

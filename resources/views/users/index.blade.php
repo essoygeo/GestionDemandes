@@ -1,11 +1,11 @@
-@extends('templates.dashboard')
+@extends('layouts.app')
 @section('title','Liste des utilisateurs')
 
 @section('content')
     <div class="card shadow-sm border-0">
         <div class="card-header bg-white">
             <h5 class="mb-3">Liste des utilisateurs</h5>
-            <a class="mb-0 btn btn-sm btn-outline-violet " href="{{route('create.users')}}">+ Creer utilisateur</a>
+            <a class="mb-0 btn btn-sm btn-outline-success " href="{{route('create.users')}}">+ Creer utilisateur</a>
         </div>
         <div class="card-body">
 
@@ -15,7 +15,7 @@
             </div>
 
 
-            <div class="table-responsive">
+            <div class="table-responsive" style="overflow: visible;">
                 <table class="table table-hover  align-middle" id="dataTable">
                     <thead class="table-light">
                     <tr>
@@ -34,19 +34,19 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->role }}</td>
                             <td>
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-outline-violet dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <div class="dropup">
+                                    <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                         Actions
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
-                                            <a class="dropdown-item violet" href="{{ route('show.users', $user->id) }}">
-                                                <i class="fa-solid fa-eye me-1 violet"></i> Voir
+                                            <a class="dropdown-item " href="{{ route('show.users', $user->id) }}">
+                                                <i class="fa-solid fa-eye me-1 text-success"></i> Voir
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item violet" href="{{ route('edit.users', $user->id) }}">
-                                                <i class="fas fa-edit me-1 violet"></i> Modifier
+                                            <a class="dropdown-item " href="{{ route('edit.users', $user->id) }}">
+                                                <i class="fas fa-edit me-1 text-success"></i> Modifier
                                             </a>
                                         </li>
                                         <li>

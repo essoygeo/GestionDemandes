@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title', 'Dashboard')</title>
 
-    @vite(['resources/scss/app.scss','resources/js/app.js'])
+
 </head>
 <body class="bg-light">
 
@@ -53,28 +53,7 @@
     </div>
 </div>
 
-<script>
 
-
-
-    document.addEventListener('DOMContentLoaded', function () {
-        @if(session('success'))
-        toastr.success("{{ session('success') }}");
-        @endif
-        @if(session('warning'))
-        toastr.info("{{ session('warning') }}");
-        @endif
-
-        @if(session('error'))
-        toastr.error("{{ session('error') }}");
-        @endif
-        @if($errors->any())
-         @foreach($errors->all() as $error)
-           toastr.error("{{ $error }}");
-         @endforeach
-        @endif
-    });
-</script>
 
 </body>
 </html>

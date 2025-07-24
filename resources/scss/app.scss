@@ -2,78 +2,48 @@
 @import "@fortawesome/fontawesome-free/css/all.min.css";
 
 
-.btn-violet {
-    background-color: #6f42c1;
-    color: white;
-    border: none;
-}
-.violet{
-    color: #6f42c1;
-}
-.bg-violet{
-    background-color: #6f42c1;
-    color: white;
-}
-
-.btn-violet:hover {
-    background-color: #59359c;
-    color: white;
-    border: none;
-}
-
-.hover-bg:hover {
-    background-color: #e5e3e8;
-}
-.btn-outline-violet {
-    color: #6f42c1;
-    background-color: transparent;
-    border: 1px solid #6f42c1;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-.btn-outline-violet:hover,
-.btn-outline-violet:focus,
-.btn-outline-violet:active,
-.btn-outline-violet.active,
-.show > .btn-outline-violet {
-    color: #fff;
-    background-color: #6f42c1;
-    border-color: #6f42c1;
-    box-shadow: none; /* Comme les autres btn-outline */
-}
-
-.btn-outline-violet:disabled,
-.btn-outline-violet.disabled {
-    color: #6f42c1;
-    background-color: transparent;
-    border-color: #6f42c1;
-    opacity: 0.65;
-    pointer-events: none;
-}
-
 
 
 //css pagination en violet
 .pagination .page-item.active .page-link {
-    background-color: #6f42c1; /* violet */
-    border-color: #6f42c1;
+    background-color: #1cc88a; /* vert */
+    border-color: #1cc88a;
     color: #fff;
 }
 
 .pagination .page-link {
-    color: #6f42c1;
+    color: #1cc88a;
 }
 
 .pagination .page-link:hover {
-    background-color: #e8e3e5; /* un violet clair au survol */
-    color: #6f42c1;
+    background-color: #c8e898; /* un violet clair au survol */
+    color: #1cc88a;
 }
 
 
-.btn-transparent-bg{
-    color: #6f42c1;
-    border: 1px solid #6f42c1;
-    background-color: transparent;
+.toast {
+    color: #fff !important;
+    background-color: rgba(0, 0, 0, 0.85) !important;
+    opacity: 0.9 !important;
+    z-index: 9999;
+}
 
+.toast-message {
+    color: #fff !important;
+}
+
+.toast-success {
+    background-color: #51a351 !important;
+}
+
+.toast-error {
+    background-color: #bd362f !important;
+}
+
+.toast-info {
+    background-color: #2f96b4 !important;
+}
+
+.toast-warning {
+    background-color: #f89406 !important;
 }
