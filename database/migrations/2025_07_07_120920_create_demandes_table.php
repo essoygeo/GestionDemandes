@@ -19,11 +19,7 @@ return new class extends Migration
                 ->on('users')
                 ->onDelete('cascade');
 
-            $table->unsignedBigInteger('categorie_id');
-            $table->foreign('categorie_id')
-                ->references('id')
-                ->on('categories')
-                ->onDelete('cascade');
+
 
             $table->unsignedBigInteger('validateur_id')->nullable();
             $table->foreign('validateur_id')

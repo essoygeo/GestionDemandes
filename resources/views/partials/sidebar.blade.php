@@ -65,23 +65,14 @@
                     <h6 class="collapse-header">Actions :</h6>
                     <a class="collapse-item" href="{{ route('create.demandes') }}">Nouvelle demande</a>
                     <a class="collapse-item" href="{{ route('index.demandes') }}">Toutes les demandes</a>
-                    <a class="collapse-item" href="{{ route('indexAdmin.demandes') }}">Mes demandes</a>
+                    <a class="collapse-item" href="{{ route('indexadmin.demandes') }}">Mes demandes</a>
                 </div>
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRessourcesAdmin"
-               aria-expanded="true" aria-controls="collapseRessourcesAdmin">
-                <i class="fas fa-briefcase"></i>
-                <span>Ressources</span>
+            <a class="nav-link" href="{{ route('index.ressources') }}">
+                <i class="fas fa-briefcase"></i> <span>Toutes les ressources</span>
             </a>
-            <div id="collapseRessourcesAdmin" class="collapse" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Actions :</h6>
-                    <a class="collapse-item" href="{{ route('create.demandes') }}">Nouvelle ressource</a>
-                    <a class="collapse-item" href="{{ route('index.demandes') }}">Toutes les ressorces</a>
-                </div>
-            </div>
         </li>
     @endif
 
@@ -99,28 +90,33 @@
                     <h6 class="collapse-header">Actions :</h6>
                     <a class="collapse-item" href="{{ route('create.demandes') }}">Nouvelle demande</a>
                     <a class="collapse-item" href="{{ route('index.demandes') }}">Toutes les demandes</a>
-                    <a class="collapse-item" href="{{ route('indexComptable.demandes') }}">Mes demandes</a>
+                    <a class="collapse-item" href="{{ route('indexcomptable.demandes') }}">Mes demandes</a>
                 </div>
             </div>
         </li>
 
         <!-- Caisse -->
+{{--        <li class="nav-item">--}}
+{{--            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCaisse"--}}
+{{--               aria-expanded="true" aria-controls="collapseCaisse">--}}
+{{--                <i class="fas fa-wallet"></i>--}}
+{{--                <span>Caisse</span>--}}
+{{--            </a>--}}
+{{--            <div id="collapseCaisse" class="collapse" data-parent="#accordionSidebar">--}}
+{{--                <div class="bg-white py-2 collapse-inner rounded">--}}
+{{--                    <h6 class="collapse-header">Actions :</h6>--}}
+{{--                    <a class="collapse-item" href="{{ route('create.caisse') }}">caisse</a>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </li>--}}
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCaisse"
-               aria-expanded="true" aria-controls="collapseCaisse">
-                <i class="fas fa-wallet"></i>
-                <span>Caisse</span>
+            <a class="nav-link" href="{{ route('create.caisse') }}">
+                <i class="fas fa-wallet"></i> <span>caisse</span>
             </a>
-            <div id="collapseCaisse" class="collapse" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Actions :</h6>
-                    <a class="collapse-item" href="{{ route('create.demandes') }}">Créer une caisse</a>
-                </div>
-            </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('create.demandes') }}">
-                <i class="fas fa-briefcase"></i> <span>Nouvelle ressource</span>
+            <a class="nav-link" href="{{ route('index.ressources') }}">
+                <i class="fas fa-briefcase"></i> <span>Toutes les ressources</span>
             </a>
         </li>
     @endif
@@ -138,15 +134,11 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Actions :</h6>
                     <a class="collapse-item" href="{{ route('create.demandes') }}">Nouvelle demande</a>
-                    <a class="collapse-item" href="{{ route('indexEmploye.demandes') }}">Mes demandes</a>
+                    <a class="collapse-item" href="{{ route('indexemploye.demandes') }}">Mes demandes</a>
                 </div>
             </div>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('create.demandes') }}">
-                <i class="fas fa-briefcase"></i> <span>Nouvelle ressource</span>
-            </a>
-        </li>
+
     @endif
 
     <hr class="sidebar-divider d-none d-md-block">

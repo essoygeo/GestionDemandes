@@ -15,11 +15,12 @@ class CheckRole
     {
         $user = Auth::user();
 
+
         // Si non connecté ou rôle non autorisé
-        if (!$user || !in_array($user->role, $roles)) {
+        if (!Auth::check() || !in_array($user->role, $roles)) {
+
             return redirect()->route('login')->with('error', 'Accès refusé');
         }
-
         return $next($request);
     }
 }

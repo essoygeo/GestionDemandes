@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Authenticable
 {
-    protected $fillable= ['nom','email','password','role'];
+    protected $fillable= ['nom','email','password','$'];
 
     public function demandes()
     {

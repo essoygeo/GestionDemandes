@@ -22,4 +22,9 @@ class Demande extends Model
     public function commentaires(){
         return  $this->hasMany(Commentaire::class);
     }
+
+    public function ressources(){
+        return  $this->belongsToMany(
+            Ressource::class,'demandes_pivot_ressources');
+    }
 }

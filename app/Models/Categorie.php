@@ -13,8 +13,8 @@ class Categorie extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function demandes()
+    public function ressources()
     {
-        return $this->hasMany(Demande::class);
+        return $this->hasMany(Ressource::class);
     }
 }

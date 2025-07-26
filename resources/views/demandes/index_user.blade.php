@@ -19,7 +19,7 @@
                     <thead class="table-light">
                     <tr>
                         <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">N°</th>
-                        <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Categorie</th>
+{{--                        <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Categorie</th>--}}
                         <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Creatueur</th>
                         <th class="text-primary-emphasis text-center align-middle" style="width: 200px;">Titre demande</th>
                         <th class="text-primary-emphasis text-center align-middle" style="width: 200px;">Raison demande</th>
@@ -34,7 +34,7 @@
                     @foreach($demandes as $demande)
                         <tr>
                             <td>{{ $demande->id }}</td>
-                            <td>{{ $demande->categorie->nom }}</td>
+{{--                            <td>{{ $demande->categorie->nom }}</td>--}}
                             <td>{{ $demande->user->nom }}</td>
 
 
@@ -160,7 +160,7 @@
 
                                     @endif
                                         <li>
-                                            <a class="dropdown-item " href="{{ route('show.commentaires', $demande->id) }}">
+                                            <a class="dropdown-item " href="{{ route('show.demandes', $demande->id) }}">
                                                 <i class="fas fa-comments me-1 text-success "></i> Commenter
                                             </a>
                                         </li>

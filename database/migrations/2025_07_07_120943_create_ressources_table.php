@@ -13,18 +13,17 @@ return new class extends Migration
     {
         Schema::create('ressources', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('categorie_id');
+            $table->foreign('categorie_id')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('cascade');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
 
-            $table->unsignedBigInteger('demande_id');
-            $table->foreign('demande_id')
-                ->references('id')
-                ->on('demandes')
-                ->onDelete('cascade');
 
             $table->string('nom');
             $table->date('date');

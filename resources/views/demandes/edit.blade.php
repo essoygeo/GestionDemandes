@@ -11,18 +11,6 @@
 
 
                 <div class="mb-3">
-                    <label for="categorie_id" class="form-label">Catégorie</label>
-                    <select class="form-select" id="categorie_id" name="categorie_id" required>
-                        <option disabled>Choisissez une catégorie</option>
-                        @foreach($categories as $categorie)
-                            <option value="{{ $categorie->id }}"
-                                {{ $demande->categorie_id == $categorie->id ? 'selected' : '' }}>
-                                {{ $categorie->nom }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="mb-3">
                     <label for="titre" class="form-label">Titre de la demande </label>
                     <input type="text" class="form-control" name="titre" id="titre" value="{{$demande->titre}}">
                 </div>

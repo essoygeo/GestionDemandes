@@ -9,11 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentaireController extends Controller
 {
-   public function show($id){
-
-      $demande = Demande::with(['user','commentaires.user'])->findOrFail($id);
-      return view('demandes.show',compact('demande'));
-   }
+//   public function show($id){
+//
+//      $demande = Demande::findOrFail($id);
+//       $ressources = $demande->ressources()->get();
+//      return view('demandes.show',compact('demande','ressources'));
+//   }
 
     public function store( Request $request ,$id){
 
