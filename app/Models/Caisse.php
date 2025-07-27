@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Caisse extends Model
 {
-    protected $fillable = ['user_id','montant_init', 'montant_actuel','date'];
+    protected $fillable = ['user_id','montant_init','date'];
+
+    public function user()
+    {
+        return  $this->belongsTo(User::class);
+    }
 }

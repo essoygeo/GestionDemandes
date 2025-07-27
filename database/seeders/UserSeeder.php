@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
        User::create([
            'nom'=>'jean',
            'email'=>'jean@gmail.com',
-           'password'=>Hash::make('jean'),
+           'password'=>Hash::make('admin'),
            'role'=>'Admin'
 
 
@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
         User::create([
             'nom'=>'jeancomptable',
             'email'=>'jeancomptale@gmail.com',
-            'password'=>Hash::make('jean'),
+            'password'=>Hash::make('admin'),
             'role'=>'Comptable'
 
 
@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
         User::create([
             'nom'=>'jeannecomptable',
             'email'=>'jeannecomptale@gmail.com',
-            'password'=>Hash::make('jeanne'),
+            'password'=>Hash::make('admin'),
             'role'=>'Comptable'
 
 
@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
         User::create([
             'nom'=>'jean',
             'email'=>'jeanemploye@gmail.com',
-            'password'=>Hash::make('jean'),
+            'password'=>Hash::make('admin'),
             'role'=>'Employe'
 
 

@@ -24,7 +24,7 @@
                         <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Creatueur</th>
                         <th class="text-primary-emphasis text-center align-middle" style="width: 200px;">Titre demande</th>
                         <th class="text-primary-emphasis text-center align-middle" style="width: 200px;">Raison demande</th>
-                        <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Type demande</th>
+{{--                        <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Type demande</th>--}}
                         <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Coût estimé</th>
                         <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Date creation</th>
                         <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">status</th>
@@ -97,14 +97,13 @@
                                 </div>
                             </td>
 
-                            <td class="text-center align-middle">{{ $demande->type }}</td>
+{{--                            <td class="text-center align-middle">{{ $demande->type }}</td>--}}
                             <td class="text-center align-middle">
-                               @if($demande->type ==='En stock')
-                                   <small class="text-primary-emphasis">pas de coût</small>
-                                   @else
+                                     @if(isset( $demande->estimation_montant))
                                     {{$demande->estimation_montant}} CFA
-                               @endif
-
+                                @else
+                                    <small class="text-primary-emphasis">Aucune estimation </small>
+                                @endif
 
                             </td>
                             <td class="text-center align-middle">{{ $demande->date }}</td>
@@ -124,13 +123,18 @@
                                         Actions
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('show.demandes', $demande->id) }}">
+                                                <i class="fa-solid fa-eye me-1 text-success"></i> Voir
+                                            </a>
+                                        </li>
                                         @if($demande->status === 'En attente')
                                             @if(Auth::user()->role === 'Comptable')
-                                                <li>
-                                                    <a class="dropdown-item" href="{{ route('show.demandes', $demande->id) }}">
-                                                        <i class="fa-solid fa-eye me-1 text-secondary"></i> Voir
-                                                    </a>
-                                                </li>
+{{--                                                <li>--}}
+{{--                                                    <a class="dropdown-item" href="{{ route('show.demandes', $demande->id) }}">--}}
+{{--                                                        <i class="fa-solid fa-eye me-1 text-secondary"></i> Voir--}}
+{{--                                                    </a>--}}
+{{--                                                </li>--}}
                                                 <li>
                                                     <a class="dropdown-item text-success" href="{{ route('show.demandes', $demande->id) }}">
                                                         <i class="fa-solid fa-check me-1 "></i> Valider
@@ -141,12 +145,7 @@
                                                         <i class="fa-solid fa-xmark me-1"></i> Refuser
                                                     </a>
                                                 </li>
-                                            @else
-                                                <li>
-                                                    <a class="dropdown-item" href="{{ route('show.demandes', $demande->id) }}">
-                                                        <i class="fa-solid fa-eye me-1 text-success"></i> Voir
-                                                    </a>
-                                                </li>
+                                                 @else
                                                 <li>
                                                     <a class="dropdown-item " href="{{ route('edit.demandes', $demande->id) }}">
                                                         <i class="fas fa-edit me-1 text-success"></i> Modifier

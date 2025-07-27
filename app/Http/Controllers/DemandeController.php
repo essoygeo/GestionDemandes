@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Caisse;
 use App\Models\Categorie;
 use App\Models\Demande;
 use App\Models\Ressource;
@@ -31,25 +32,27 @@ class DemandeController extends Controller
 
             'titre' => 'required|string',
             'raison' => 'required|string',
-            'type' => 'required|in:Achat,En stock',
+            'no_estimation' => 'nullable|boolean',
+            'estimation_montant' => $request->no_estimation
+                ? 'nullable'
+                : 'required|numeric|min:0',
             'date' => 'required|date',
             'ressources' => 'required|array',
             'ressources.*' => 'exists:ressources,id',
 
         ]);
-        if ($request->type === 'En stock') {
-            $rules['estimation_montant'] = 'nullable';
-        } else {
-            $rules['estimation_montant'] = 'required|numeric|min:0';
-        }
+//        if ($request->type === 'En stock') {
+//            $rules['estimation_montant'] = 'nullable';
+//        } else {
+//            $rules['estimation_montant'] = 'required|numeric|min:0';
+//        }
         $validated = $request->validate($rules);
 
         $demande = Demande::create([
             'user_id' => Auth::id(),
             'titre' => $validated['titre'],
             'raison' => $validated['raison'],
-            'estimation_montant' => $validated['estimation_montant'],
-            'type' => $validated['type'],
+            'estimation_montant' => $validated['estimation_montant'] ?? null,
             'date' => $validated['date'],
         ]);
 
@@ -88,8 +91,33 @@ class DemandeController extends Controller
         $demande = Demande::with(['user', 'categorie', 'ressources.user', 'ressources.categorie','commentaires.user'])->findOrFail($id);
         $ressources = $demande->ressources()->get();
 
+        $caisse_mtn_actuel = Caisse::first()->montant_init;
+        if(!empty($demande->estimation_montant)) {
+            // estimation existe et n'est pas nulle/0/""/false
+            if($caisse_mtn_actuel > $demande->estimation_montant){
+                if($demande->status === 'En attente'){
+                    session()->flash('success','le montant de la caisse couvre estimation');
+                }
+            }
+            elseif($caisse_mtn_actuel < $demande->estimation_montant){
+                session()->flash('error','le montant de la caisse ne couvre pas l\'estimation');
+            }
+            else{
+                session()->flash('info','le montant de la caisse est égal à l\'estimation');
+            }
+        } else {
+            session()->flash('info','Pas d\'estimation pour cette demande');
+        }
 
-        return view('demandes.show', compact('demande','ressources','categories'));
+
+
+
+
+
+
+
+
+        return view('demandes.show', compact('demande','ressources','categories','caisse_mtn_actuel'));
     }
 
     public function destroy($id)
@@ -98,7 +126,6 @@ class DemandeController extends Controller
         $demande->delete();
 
         //$route = Auth::user()->role ==='Employe' ? 'indexEmploye.demandes' : 'index.demandes';
-
         //return redirect()->route($route)->with('success', 'demande suprimée avec sucess');
 
         return redirect()->back()->with('success', 'Demande supprimée avec succès');
@@ -107,26 +134,35 @@ class DemandeController extends Controller
     public function edit($id)
     {
         $demande = Demande::findOrFail($id);
-        $categories = Categorie::all();
 
-        return view('demandes.edit', compact('demande', 'categories'));
+        $ressources = Ressource::all(); // toutes les ressources
+        $ressourcesActuelles = $demande->ressources()->pluck('ressources.id')->toArray(); // les ID associés
+
+        return view('demandes.edit', compact('demande', 'ressources', 'ressourcesActuelles'));
     }
+
 
     public function update(Request $request, $id)
     {
         $rules = [
             // 'categorie_id' => 'required',
+
             'titre' => 'required|string',
             'raison' => 'required|string',
-            'type' => 'required|in:Achat,En stock',
+            'no_estimation' => 'nullable|boolean',
+            'estimation_montant' => $request->no_estimation
+                ? 'nullable'
+                : 'required|numeric|min:0',
             'date' => 'required|date',
+            'ressources' => 'required|array',
+            'ressources.*' => 'exists:ressources,id',
         ];
 
-        if ($request->type === 'En stock') {
-            $rules['estimation_montant'] = 'nullable';
-        } else {
-            $rules['estimation_montant'] = 'required|numeric|min:0';
-        }
+//        if ($request->type === 'En stock') {
+//            $rules['estimation_montant'] = 'nullable';
+//        } else {
+//            $rules['estimation_montant'] = 'required|numeric|min:0';
+//        }
 
         $validated = $request->validate($rules);
 
@@ -138,10 +174,9 @@ class DemandeController extends Controller
             'titre' => $validated['titre'],
             'raison' => $validated['raison'],
             'estimation_montant' => $validated['estimation_montant'] ?? null,
-            'type' => $validated['type'],
             'date' => $validated['date'],
         ]);
-
+        $demande->ressources()->sync($validated['ressources']);
         //$route = Auth::user()->role ==='Employe' ? 'indexEmploye.demandes' : 'index.demandes';
 
         //return redirect()->route($route)->with('success', 'Demande modifiée avec succès');

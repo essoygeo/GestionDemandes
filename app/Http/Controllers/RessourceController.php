@@ -78,11 +78,24 @@ class RessourceController extends Controller
             'categorie_id' => 'required',
             'nom' => 'required|string',
             'date_ressource' => 'required|date',
-            'marque' => 'sometimes|required|string',
-            'model' => 'sometimes|required|string'
+
 
         ]);
+             $categorie = $ressource->categorie;
+             if (in_array(strtolower($categorie->nom),['logicielle','logicielles','logiciels','logiciel']) ){
 
+                $rules ['marque'] = 'nullable|string';
+                $rules ['model'] = 'nullable|string';
+
+
+                           }
+
+             elseif (in_array(strtolower($categorie->nom),['materielle','materielles','materiels','materiel'])){
+
+                 $rules ['marque'] = 'required|string';
+                 $rules ['model'] = 'required|string';
+
+             }
         $validated = $request->validate($rules);
 
         $ressource->update([

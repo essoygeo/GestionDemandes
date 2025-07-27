@@ -69,9 +69,15 @@
                 </div>
             </div>
         </li>
+
         <li class="nav-item">
             <a class="nav-link" href="{{ route('index.ressources') }}">
                 <i class="fas fa-briefcase"></i> <span>Toutes les ressources</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('index.caisse') }}">
+                <i class="fas fa-wallet"></i> <span>caisse</span>
             </a>
         </li>
     @endif
@@ -110,7 +116,7 @@
 {{--            </div>--}}
 {{--        </li>--}}
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('create.caisse') }}">
+            <a class="nav-link" href="{{ route('index.caisse') }}">
                 <i class="fas fa-wallet"></i> <span>caisse</span>
             </a>
         </li>

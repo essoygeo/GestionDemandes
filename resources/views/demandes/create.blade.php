@@ -114,10 +114,11 @@
                             <input type="number" step="0.01" min="0" class="form-control" name="estimation_montant"
                                    id="estimation_montant" placeholder="Saisir montant en FCFA" value="{{old('estimation_montant')}}">
                         </div>
+                        <input type="hidden" name="no_estimation" value="0">
                         <div class="col-md-6 d-flex align-items-end">
                             <div class="form-check">
-                                <input class="form-check-input " type="checkbox" id="flexSwitchCheckDefault">
-                                <label class="form-check-label " for="flexSwitchCheckDefault">
+                                <input class="form-check-input "  name="no_estimation" type="checkbox" id="no_estimation" value="1">
+                                <label class="form-check-label " for="no_estimation">
                                     Je ne peux pas faire d'estimation de montant
                                 </label>
                             </div>
@@ -140,7 +141,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // EstimationScript
-            const check = document.getElementById('flexSwitchCheckDefault');
+            const check = document.getElementById('no_estimation');
             const estimationDiv = document.getElementById('estimation_montant_div');
             const estimationInput = document.getElementById('estimation_montant');
 

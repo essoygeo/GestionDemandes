@@ -10,6 +10,7 @@ class AdminController extends Controller
 {
     public function adminDashboard()
     {
+//        dd('+65+6');
         return view('welcome.welcome');
     }
 

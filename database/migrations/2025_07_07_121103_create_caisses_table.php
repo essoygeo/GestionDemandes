@@ -20,7 +20,6 @@ return new class extends Migration
                 ->onDelete('cascade');
 
             $table->decimal('montant_init',10,2);
-            $table->decimal('montant_actuel',10,2);
             $table->date('date');
 
             $table->timestamps();

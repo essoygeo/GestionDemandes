@@ -50,6 +50,8 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
+
+        //dd('ggg');
         $role = Auth::user()->role;
         switch ($role) {
             case'Admin':

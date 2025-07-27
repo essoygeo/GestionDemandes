@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function (){
 
 
 //Admin
-Route::middleware('checkrole: Admin')->group(function (){
+Route::middleware('checkrole:Admin')->group(function (){
     Route::get('/admin/dashboard', [AdminController::class, 'adminDashboard'])->name('admin.dashboard');
     Route::get('/admin/create/user', [AdminController::class, 'create'])->name('create.users');
     Route::post('/admin/store/user', [AdminController::class, 'store'])->name('store.users');
@@ -92,8 +92,8 @@ Route::middleware('checkrole:Comptable')->group(function (){
     Route::get('/comptable/dashboard', [ComptableController::class, 'comptableDashboard'])->name('comptable.dashboard');
     //indexDemandeComptable
     Route::get('/comptable/index/demande', [DemandeController::class, 'indexUserDemande'])->name('indexcomptable.demandes');
-    Route::get('/comptable/create/caisse', [caisseController::class, 'create'])->name('create.caisse');
-    Route::post('/comptable/store/caisse', [caisseController::class, 'store'])->name('store.caisse');
+
+
 
 });
 
@@ -112,5 +112,16 @@ Route::middleware(['checkrole:Admin,Comptable'])->group(function (){
     Route::get('/index/demande', [DemandeController::class, 'index'])->name('index.demandes');
 //indexRessources
     Route::get('/index/ressource', [RessourceController::class, 'index'])->name('index.ressources');
+    //caisse
+    //Route::get('/comptable/create/caisse', [caisseController::class, 'create'])->name('create.caisse');
+    Route::post('/store/caisse', [caisseController::class, 'store'])->name('store.caisse');
+    Route::get('/index/caisse', [caisseController::class, 'index'])->name('index.caisse');
+    //Route::get('/comptable/edit/caisse/{caisse}', [caisseController::class, 'edit'])->name('edit.caisse');
+    Route::put('/update/caisse/{caisse}', [caisseController::class, 'update'])->name('update.caisse');
+    //Route::DELETE('/comptable/destroy/caisse/{caisse}', [CategorieController::class, 'destroy'])->name('destroy.caisse');
 
 });
+
+
+
+Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);

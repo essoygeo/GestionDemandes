@@ -72,7 +72,7 @@
                                     @foreach($ressource->demandes as $demande)
                                         <span>{{ $demande->titre }} </span>
                                         @if(!$loop->last)
-                                            <span class="text-success"> & </span>
+                                            <span> | </span>
                                         @endif
                                     @endforeach
                                 @endif

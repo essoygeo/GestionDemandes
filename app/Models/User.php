@@ -22,5 +22,8 @@ class User extends Authenticable
     {
         return $this->hasMany(Commentaire::class);
     }
-
+    public function caisse()
+    {
+        return  $this->hasOne(Caisse::class);
+    }
 }
