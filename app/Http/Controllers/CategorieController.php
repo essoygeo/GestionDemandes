@@ -21,6 +21,12 @@ class CategorieController extends Controller
             'nom' => 'required|unique:categories,nom',
 
         ]);
+        if(!in_array($validated['nom'],[
+            'logicielle','logiciel','logicielles','logiciels','materielle','materiel','materiels','materielles'
+        ])){
+            return redirect()->route('create.categories')->with('error', 'categorie non reconnue par le systeme !');
+        }
+
        $userId = Auth::id();
         Categorie::create([
             'nom' => $validated['nom'],
@@ -49,6 +55,12 @@ class CategorieController extends Controller
         $validated = $request->validate([
             'nom' => 'required|unique:categories,nom,' . $categorie->id,
         ]);
+
+        if(!in_array($validated['nom'],[
+            'logicielle','logiciel','logicielles','logiciels','materielle','materiel','materiels','materielles'
+        ])){
+            return redirect()->route('create.categories')->with('error', 'categorie non reconnue par le systeme !');
+        }
 
         $categorie->update($validated);
 

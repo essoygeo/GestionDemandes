@@ -25,7 +25,7 @@
                         <th class="text-primary-emphasis text-center align-middle" style="width: 200px;">Titre demande</th>
                         <th class="text-primary-emphasis text-center align-middle" style="width: 200px;">Raison demande</th>
 {{--                        <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Type demande</th>--}}
-                        <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Coût estimé</th>
+{{--                        <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Coût estimé</th>--}}
                         <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Date creation</th>
                         <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">status</th>
                         <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Actions</th>
@@ -98,15 +98,8 @@
                             </td>
 
 {{--                            <td class="text-center align-middle">{{ $demande->type }}</td>--}}
-                            <td class="text-center align-middle">
-                                     @if(isset( $demande->estimation_montant))
-                                    {{$demande->estimation_montant}} CFA
-                                @else
-                                    <small class="text-primary-emphasis">Aucune estimation </small>
-                                @endif
 
-                            </td>
-                            <td class="text-center align-middle">{{ $demande->date }}</td>
+                            <td class="text-center align-middle">{{ $demande->created_at->format('y/m/d') }}</td>
                             <td class="text-center align-middle">
                                 @if($demande->status === 'En attente')
                                     <span class="badge bg-warning">{{ $demande->status }}</span>

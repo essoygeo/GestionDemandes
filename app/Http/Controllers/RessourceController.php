@@ -40,7 +40,10 @@ class RessourceController extends Controller
         $rules = ([
             'categorie_id' => 'required',
             'nom' => 'required|string',
-            'date_ressource' => 'required|date',
+                        'no_estimation' => 'nullable|boolean',
+            'estimation_montant' => $request->no_estimation
+                ? 'nullable'
+                : 'required|numeric|min:0',
             'marque' => 'sometimes|required|string',
             'model' => 'sometimes|required|string'
 
@@ -52,9 +55,10 @@ class RessourceController extends Controller
             'categorie_id' => $validated['categorie_id'],
             'user_id' => Auth::id(),
             'nom' => $validated['nom'],
-            'date' => $validated['date_ressource'],
             'marque' => $validated['marque'] ?? null,
             'model' => $validated['model'] ?? null,
+            'status'=>'A payer',
+            'estimation_montant' => $validated['estimation_montant'] ?? null,
 
         ]);
 
@@ -65,6 +69,7 @@ class RessourceController extends Controller
     {
 
         $ressources = Ressource::with('user', 'categorie','demandes')->paginate(10);
+
         $categories = Categorie::all();
 
         return view('ressources.index', compact('ressources','categories'));
@@ -77,7 +82,10 @@ class RessourceController extends Controller
         $rules = ([
             'categorie_id' => 'required',
             'nom' => 'required|string',
-            'date_ressource' => 'required|date',
+            'estimation_montant' => $request->no_estimation
+                ? 'nullable'
+                : 'required|numeric|min:0',
+
 
 
         ]);
@@ -102,9 +110,10 @@ class RessourceController extends Controller
             'categorie_id' => $validated['categorie_id'],
             'user_id' => Auth::id(),
             'nom' => $validated['nom'],
-            'date' => $validated['date_ressource'],
             'marque' => $validated['marque'] ?? null,
             'model' => $validated['model'] ?? null,
+
+            'estimation_montant' => $validated['estimation_montant'] ?? null,
 
         ]);
 
@@ -117,6 +126,25 @@ class RessourceController extends Controller
         $ressource = Ressource::findOrFail($id);
         $ressource->delete();
         return redirect()->back()->with('success', 'ressource suprimeé avec succès');
+    }
+
+
+    public function changeStatus(Request $request,$id)
+    {
+        $ressource = Ressource::findOrFail($id);
+         $ressource->status = $request->nouveau_status;
+        $ressource->save();
+
+        return back()->with('success', 'Statut de la ressource mis à jour.');
+    }
+
+    public function updateMontant(Request $request,$id)
+    {
+        $ressource = Ressource::findOrFail($id);
+        $ressource->estimation_montant = $request->estimation_montant;
+        $ressource->save();
+
+        return back()->with('success', 'montant mise à jour de la ressource.');
     }
 }
 

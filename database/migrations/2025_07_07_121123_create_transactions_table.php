@@ -34,7 +34,7 @@ return new class extends Migration
             $table->enum('type',['Entree','Sortie']);
             $table->decimal('montant_transaction',10,2);
             $table->string('motif');
-            $table->date('date');
+
 
 
 

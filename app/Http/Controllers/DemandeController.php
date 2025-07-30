@@ -6,6 +6,7 @@ use App\Models\Caisse;
 use App\Models\Categorie;
 use App\Models\Demande;
 use App\Models\Ressource;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,11 +33,10 @@ class DemandeController extends Controller
 
             'titre' => 'required|string',
             'raison' => 'required|string',
-            'no_estimation' => 'nullable|boolean',
-            'estimation_montant' => $request->no_estimation
-                ? 'nullable'
-                : 'required|numeric|min:0',
-            'date' => 'required|date',
+//            'no_estimation' => 'nullable|boolean',
+//            'estimation_montant' => $request->no_estimation
+//                ? 'nullable'
+//                : 'required|numeric|min:0',
             'ressources' => 'required|array',
             'ressources.*' => 'exists:ressources,id',
 
@@ -52,8 +52,8 @@ class DemandeController extends Controller
             'user_id' => Auth::id(),
             'titre' => $validated['titre'],
             'raison' => $validated['raison'],
-            'estimation_montant' => $validated['estimation_montant'] ?? null,
-            'date' => $validated['date'],
+//            'estimation_montant' => $validated['estimation_montant'] ?? null,
+
         ]);
 
         //$route = Auth::user()->role ==='Employe' ? 'indexEmploye.demandes' : 'index.demandes';
@@ -88,36 +88,29 @@ class DemandeController extends Controller
 
     {
         $categories = Categorie::all();
-        $demande = Demande::with(['user', 'categorie', 'ressources.user', 'ressources.categorie','commentaires.user'])->findOrFail($id);
+        $demande = Demande::with(['user', 'categorie', 'ressources.user', 'ressources.categorie', 'commentaires.user'])->findOrFail($id);
         $ressources = $demande->ressources()->get();
-
+        $montantRessources = $demande->ressources()->sum('estimation_montant');
         $caisse_mtn_actuel = Caisse::first()->montant_init;
-        if(!empty($demande->estimation_montant)) {
-            // estimation existe et n'est pas nulle/0/""/false
-            if($caisse_mtn_actuel > $demande->estimation_montant){
-                if($demande->status === 'En attente'){
-                    session()->flash('success','le montant de la caisse couvre estimation');
-                }
-            }
-            elseif($caisse_mtn_actuel < $demande->estimation_montant){
-                session()->flash('error','le montant de la caisse ne couvre pas l\'estimation');
-            }
-            else{
-                session()->flash('info','le montant de la caisse est égal à l\'estimation');
-            }
-        } else {
-            session()->flash('info','Pas d\'estimation pour cette demande');
-        }
+//        if(!empty($demande->estimation_montant)) {
+//            // estimation existe et n'est pas nulle/0/""/false
+//            if($caisse_mtn_actuel > $demande->estimation_montant){
+//                if($demande->status === 'En attente'){
+//                    session()->flash('success','le montant de la caisse couvre estimation');
+//                }
+//            }
+//            elseif($caisse_mtn_actuel < $demande->estimation_montant){
+//                session()->flash('error','le montant de la caisse ne couvre pas l\'estimation');
+//            }
+//            else{
+//                session()->flash('info','le montant de la caisse est égal à l\'estimation');
+//            }
+//        } else {
+//            session()->flash('info','Pas d\'estimation pour cette demande');
+//        }
 
 
-
-
-
-
-
-
-
-        return view('demandes.show', compact('demande','ressources','categories','caisse_mtn_actuel'));
+        return view('demandes.show', compact('demande', 'ressources', 'categories', 'caisse_mtn_actuel', 'montantRessources'));
     }
 
     public function destroy($id)
@@ -150,10 +143,6 @@ class DemandeController extends Controller
             'titre' => 'required|string',
             'raison' => 'required|string',
             'no_estimation' => 'nullable|boolean',
-            'estimation_montant' => $request->no_estimation
-                ? 'nullable'
-                : 'required|numeric|min:0',
-            'date' => 'required|date',
             'ressources' => 'required|array',
             'ressources.*' => 'exists:ressources,id',
         ];
@@ -173,8 +162,8 @@ class DemandeController extends Controller
             //'categorie_id' => $validated['categorie_id'],
             'titre' => $validated['titre'],
             'raison' => $validated['raison'],
-            'estimation_montant' => $validated['estimation_montant'] ?? null,
-            'date' => $validated['date'],
+//            'estimation_montant' => $validated['estimation_montant'] ?? null,
+
         ]);
         $demande->ressources()->sync($validated['ressources']);
         //$route = Auth::user()->role ==='Employe' ? 'indexEmploye.demandes' : 'index.demandes';
@@ -192,6 +181,72 @@ class DemandeController extends Controller
         $demandes = $user->demandes()->with('categorie')->paginate(10);
 
         return view('demandes.index_user', compact('demandes'));
+    }
+
+
+    public function valider(Request $request, $id)
+    {
+        $caisse = Caisse::first();
+        $demande = Demande::findOrFail($id);
+        $resources = $demande->ressources;
+        $montRessources = $demande->ressources()->where('status', 'Payer')->sum('estimation_montant');
+
+        if ($demande->status === 'En attente') {
+            if ($caisse->montant_init > $montRessources) {
+
+                // Vérifie s'il reste des ressources non encore traitées
+                foreach ($resources as $resource) {
+                    if ($resource->status === 'A payer') {
+                        return redirect()->back()->with('error', 'Veuillez traiter toutes les ressources avant de valider refuser!');
+                    }
+                }
+
+                // Toutes les ressources sont traitées, on peut créer les transactions
+                foreach ($resources as $resource) {
+                    if ($resource->status === 'Payer') {
+                        Transaction::create([
+                            'user_id' => Auth::id(),
+                            'caisse_id' => $caisse->id,
+                            'demande_id' => $demande->id,
+                            'montant_transaction' => $resource->estimation_montant,
+                            'type' => 'Sortie',
+                            'motif' => 'Sortie du montant de caisse à cause de la ressource #' . $resource->id,
+                        ]);
+                    }
+                }
+
+                $caisse->montant_init -= $montRessources;
+                $caisse->save();
+
+                $demande->status = 'Validé';
+                $demande->save();
+
+                return redirect()->route('index.demandes')->with('success', 'Demande validée avec succès.');
+            } else {
+                return redirect()->back()->with('error', 'Montant de la caisse insuffisant !');
+            }
+        }
+
+        return redirect()->back()->with('error', 'Demande déjà traitée.');
+    }
+
+    public function refuser(Request $request, $id)
+    {
+        $demande = Demande::findOrFail($id);
+        $resources = $demande->ressources;
+        if ($demande->status === 'En attente') {
+            foreach ($resources as $resource) {
+                if ($resource->status === 'A payer') {
+                    return redirect()->back()->with('error', 'Veuillez traiter toutes les ressources avant de valider ou refuser !');
+                }
+            }
+            $demande->status = 'Refusé';
+            $demande->save();
+            return redirect()->route('index.demandes')->with('success', 'Demande refusée avec succès.');
+
+        }
+        return redirect()->back()->with('error', 'Demande déjà traitée.');
+
     }
 
 }

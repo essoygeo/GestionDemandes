@@ -18,12 +18,17 @@ class User extends Authenticable
     {
         return $this->hasMany(Categorie::class);
     }
-    public function commentaires()
+    public function comentaires()
     {
         return $this->hasMany(Commentaire::class);
     }
     public function caisse()
     {
         return  $this->hasOne(Caisse::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }

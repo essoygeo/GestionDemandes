@@ -29,12 +29,10 @@ return new class extends Migration
 
             $table->string('titre');
             $table->text('raison');
-            $table->decimal('estimation_montant',10,2)->nullable();
-            $table->decimal('montant_valide',10,2)->nullable();
             $table->enum('status',['En attente','Refusé','Validé'])->default('En attente');
 
 
-            $table->date('date');
+
             $table->timestamps();
         });
     }

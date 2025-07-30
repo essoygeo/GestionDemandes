@@ -38,37 +38,12 @@
                         name="raison"
                     >{{$demande->raison}}</textarea>
                 </div>
-                <div class="row mb-3">
 
-                    {{--                        <div class=" col-md-6 mb-3">--}}
-                    {{--                            <label for="type" class="form-label">Type de demande</label>--}}
-                    {{--                            <select class="form-select" id="type" name="type">--}}
-                    {{--                                <option value="">Choisir un type de demande</option>--}}
-                    {{--                                <option value="Achat" {{ old('type') == 'Achat' ? 'selected' : '' }}>Achat</option>--}}
-                    {{--                                <option value="En stock" {{ old('type') == 'En stock' ? 'selected' : '' }}>En stock</option>--}}
-                    {{--                            </select>--}}
-                    {{--                        </div>--}}
-
-                    <div class="col-md-6" id="estimation_montant_div">
-                        <label for="estimation_montant" class="form-label">Coût estimé de la demande</label>
-                        <input type="number" step="0.01" min="0" class="form-control" name="estimation_montant"
-                               id="estimation_montant" placeholder="Saisir montant en FCFA" value="{{old('estimation_montant',$demande->estimation_montant)}}">
-                    </div>
-                    <input type="hidden" name="no_estimation" value="0">
-                    <div class="col-md-6 d-flex align-items-end">
-                        <div class="form-check">
-                            <input class="form-check-input "  name="no_estimation" type="checkbox" id="no_estimation" {{$demande->estimation_montant=== null ? 'checked' : ''}} value="1">
-                            <label class="form-check-label " for="no_estimation" >
-                                Je ne peux pas faire d'estimation de montant
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label for="date" class="form-label">Date de creation</label>
-                    <input type="date"  class="form-control" name="date"
-                           id="date"  value="{{$demande->date}}">
-                </div>
+{{--                <div class="mb-3">--}}
+{{--                    <label for="date" class="form-label">Date de creation</label>--}}
+{{--                    <input type="date"  class="form-control" name="date"--}}
+{{--                           id="date"  value="{{$demande->created_at->format('y/m/d')}}">--}}
+{{--                </div>--}}
 
                 <button type="submit"  class="btn  btn-success w-100" href="{{route('index.demandes')}}">
                     modifier
@@ -77,31 +52,7 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
 
-
-// EstimationScript
-            const check = document.getElementById('no_estimation');
-            const estimationDiv = document.getElementById('estimation_montant_div');
-            const estimationInput = document.getElementById('estimation_montant');
-
-            function toggleEstimation() {
-                if (check.checked ) {
-                    estimationDiv.style.display = 'none';
-                    estimationInput.value = '';
-                } else {
-                    estimationDiv.style.display = 'block';
-                }
-            }
-
-            check.addEventListener('change', toggleEstimation);
-            toggleEstimation();
-
-
-        })
-
-    </script>
 
 
 

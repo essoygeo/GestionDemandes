@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Caisse extends Model
 {
-    protected $fillable = ['user_id','montant_init','date'];
+    protected $fillable = ['user_id','montant_init'];
 
     public function user()
     {
