@@ -92,8 +92,8 @@ Route::middleware('checkrole:Comptable')->group(function (){
     Route::get('/comptable/dashboard', [ComptableController::class, 'comptableDashboard'])->name('comptable.dashboard');
     //indexDemandeComptable
     Route::get('/comptable/index/demande', [DemandeController::class, 'indexUserDemande'])->name('indexcomptable.demandes');
-    Route::PATCH('/updateMontant/ressource/{ressource}', [RessourceController::class, 'updateMontant'])->name('updatemontant.ressources');
-    Route::PATCH('/ressourcestatus/ressource/{ressource}', [RessourceController::class, 'changeStatus'])->name('changestatus.ressources');
+    Route::PATCH('/updateMontant/ressource/{ressource}/demande/{demande}', [RessourceController::class, 'updateMontant'])->name('updatemontant.ressources');
+    Route::PATCH('/ressourcestatus/ressource/{ressource}/demande/{demande}', [RessourceController::class, 'changeStatus'])->name('changestatus.ressources');
     Route::post('/comptable/valider/demande/{demande}', [DemandeController::class, 'valider'])->name('valider.demandes');
     Route::post('/comptable/refuser/demande/{demande}', [DemandeController::class, 'refuser'])->name('refuser.demandes');
 

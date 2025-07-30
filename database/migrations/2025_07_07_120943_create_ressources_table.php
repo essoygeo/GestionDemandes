@@ -26,8 +26,8 @@ return new class extends Migration
 
 
             $table->string('nom');
-//            $table->enum('status',['A payer','Payer','Ne sera pas payé','En stock'])->default('A payer');
-//            $table->decimal('estimation_montant',10,2)->nullable();
+            $table->enum('status',['A payer','Payer','Ne sera pas payé','En stock'])->default('A payer');
+            $table->decimal('estimation_montant',10,2)->nullable();
 
             $table->string('model')->nullable();
             $table->string('marque')->nullable();

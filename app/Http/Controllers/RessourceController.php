@@ -129,20 +129,22 @@ class RessourceController extends Controller
     }
 
 
-    public function changeStatus(Request $request,$id)
+    public function changeStatus(Request $request,$ressourceId,$demandeId)
     {
-        $ressource = Ressource::findOrFail($id);
-         $ressource->status = $request->nouveau_status;
-        $ressource->save();
+        $demande = Demande::findOrFail($demandeId);
+         $demande->ressources()->updateExistingPivot($ressourceId,[
+            'status'=>$request->nouveau_status,
+        ]);
 
         return back()->with('success', 'Statut de la ressource mis à jour.');
     }
 
-    public function updateMontant(Request $request,$id)
+    public function updateMontant(Request $request,$ressourceId,$demandeId)
     {
-        $ressource = Ressource::findOrFail($id);
-        $ressource->estimation_montant = $request->estimation_montant;
-        $ressource->save();
+        $demande = Demande::findOrFail($demandeId);
+        $demande->ressources()->updateExistingPivot($ressourceId,[
+            'estimation_montant'=>$request->estimation_montant,
+        ]);
 
         return back()->with('success', 'montant mise à jour de la ressource.');
     }

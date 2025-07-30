@@ -33,10 +33,13 @@
                         <th class="text-primary-emphasis text-center align-middle" style="width: 200px;">Date
                             creation
                         </th>
-                        <th class="text-primary-emphasis text-center align-middle" style="width: 200px;">Demandes
-                            associées
-
+                        <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">
+                           Cout-estimé à la creation
                         </th>
+{{--                        <th class="text-primary-emphasis text-center align-middle" style="width: 200px;">Demandes--}}
+{{--                            associées--}}
+
+{{--                        </th>--}}
 
                         <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Actions
                         </th>
@@ -63,21 +66,30 @@
                                 @else
                                     {{$ressource->model}}
                                 @endif
+
                             </td>
-                            <td class="text-center align-middle">{{$ressource->date}}</td>
+                            <td class="text-center align-middle">{{$ressource->created_at->format('y/m/d')}}</td>
                             <td class="text-center align-middle">
-                                @if($ressource->demandes->isEmpty())
-                                    <small class="text-primary-emphasis">Aucune demande associée</small>
+                                @if(isset( $ressource->estimation_montant))
+                                    {{$ressource->estimation_montant}} CFA
                                 @else
-                                    @foreach($ressource->demandes as $demande)
-                                        <span>{{ $demande->titre }} </span>
-                                        @if(!$loop->last)
-                                            <span> | </span>
-                                        @endif
-                                    @endforeach
+                                    <small class="text-primary-emphasis">Aucune estimation </small>
                                 @endif
 
                             </td>
+{{--                            <td class="text-center align-middle">--}}
+{{--                                @if($ressource->demandes->isEmpty())--}}
+{{--                                    <small class="text-primary-emphasis">Aucune demande associée</small>--}}
+{{--                                @else--}}
+{{--                                    @foreach($ressource->demandes as $demande)--}}
+{{--                                        <span>{{ $demande->titre }} </span>--}}
+{{--                                        @if(!$loop->last)--}}
+{{--                                            <span> | </span>--}}
+{{--                                        @endif--}}
+{{--                                    @endforeach--}}
+{{--                                @endif--}}
+
+{{--                            </td>--}}
                             <td class="text-center align-middle">
                                 <div class="dropup">
                                     <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button"
@@ -149,10 +161,10 @@
                                                         <div class="col-md-6 mb-3">
                                                             <label for="date_ressource" class="form-label">Date
                                                                 création</label>
-                                                            <input type="date" class="form-control"
+                                                            <input type="text" class="form-control"
                                                                    name="date_ressource"
                                                                    id="date_ressource"
-                                                                   value="{{ $ressource->date }}" readonly>
+                                                                   value="{{$ressource->created_at->format('y/m/d')}}" readonly>
                                                         </div>
 
                                                         <div class="col-md-6 mb-3">
@@ -185,7 +197,19 @@
                                                             </div>
                                                         </div>
                                                     @endif
+                                                    <div class="row">
+                                                        <div class="col-md-12 mb-3">
+                                                            <label for="estimation_montant" class="form-label">Estimation
+                                                                de la ressource à la creation</label>
+                                                            <input type="text" name="estimation_montant" id="estimation_montant"
+                                                                   class="form-control"
+                                                                   value="{{$ressource->estimation_montant === null ? 'Aucune estimation' : $ressource->estimation_montant }}"
+                                                                   readonly>
 
+
+                                                        </div>
+
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>

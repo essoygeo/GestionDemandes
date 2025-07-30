@@ -7,14 +7,14 @@
         <div class="card mb-4">
             <div class="card-header bg-success-subtle d-flex justify-content-between align-items-center">
                 Détails de la Demande
-{{--                bouton de validation demande--}}
+                {{--                bouton de validation demande--}}
                 @if($demande->status === 'En attente' && Auth::user()->role == 'Comptable')
                     <div>
                         <form action="{{ route('valider.demandes', ['demande'=>$demande->id]) }}" method="POST"
                               class="d-inline">
                             @csrf
                             <button type="submit" class="btn btn-sm btn-success me-2 rounded">
-                                <i class="fa-solid fa-thumbs-up"></i>  Valider
+                                <i class="fa-solid fa-thumbs-up"></i> Valider
                             </button>
                         </form>
 
@@ -138,8 +138,8 @@
                                     @endif
                                 </td>
                                 <td class="text-center align-middle">
-                                    @if(isset( $ressource->estimation_montant))
-                                        {{$ressource->estimation_montant}} CFA
+                                    @if(isset( $ressource->pivot->estimation_montant))
+                                        {{$ressource->pivot->estimation_montant}} CFA
                                     @else
                                         <small class="text-primary-emphasis">Aucune estimation </small>
                                     @endif
@@ -147,14 +147,14 @@
                                 </td>
                                 <td class="text-center align-middle">{{$ressource->created_at->format('y/m/d')}}</td>
                                 <td class="text-center align-middle">
-                                    @if($ressource->status === 'A payer')
-                                        <span class="badge bg-warning"> {{$ressource->status}}</span>
-                                    @elseif($ressource->status === 'Payer')
-                                        <span class="badge bg-success"> {{$ressource->status}}</span>
-                                    @elseif($ressource->status === 'En stock')
-                                        <span class="badge bg-primary"> {{$ressource->status}}</span>
+                                    @if($ressource->pivot->status === 'A payer')
+                                        <span class="badge bg-warning"> {{$ressource->pivot->status}}</span>
+                                    @elseif($ressource->pivot->status === 'Payer')
+                                        <span class="badge bg-success"> {{$ressource->pivot->status}}</span>
+                                    @elseif($ressource->pivot->status === 'En stock')
+                                        <span class="badge bg-primary"> {{$ressource->pivot->status}}</span>
                                     @else
-                                        <span class="badge bg-danger"> {{$ressource->status}}</span>
+                                        <span class="badge bg-danger"> {{$ressource->pivot->status}}</span>
                                     @endif
 
                                 </td>
@@ -213,7 +213,7 @@
 
                                                 <li>
                                                     <form
-                                                        action="{{route('changestatus.ressources',['ressource'=>$ressource->id])}}"
+                                                        action="{{route('changestatus.ressources',['ressource'=>$ressource->id,'demande'=>$demande->id])}}"
                                                         method="post">
                                                         @method('PATCH')
                                                         @csrf
@@ -226,7 +226,7 @@
                                                 </li>
                                                 <li>
                                                     <form
-                                                        action="{{route('changestatus.ressources',['ressource'=>$ressource->id])}}"
+                                                        action="{{route('changestatus.ressources',['ressource'=>$ressource->id,'demande'=>$demande->id])}}"
                                                         method="post">
                                                         @method('PATCH')
                                                         @csrf
@@ -238,14 +238,15 @@
                                                 </li>
                                                 <li>
                                                     <form
-                                                        action="{{route('changestatus.ressources',['ressource'=>$ressource->id])}}"
+                                                        action="{{route('changestatus.ressources',['ressource'=>$ressource->id,'demande'=>$demande->id])}}"
                                                         method="post">
                                                         @method('PATCH')
                                                         @csrf
                                                         <input type="hidden" name="nouveau_status"
                                                                value="Ne sera pas payé">
                                                         <button type="submit" class="dropdown-item">
-                                                            <i class="fa-solid fa-xmark text-danger"></i> Ne sera pas payé
+                                                            <i class="fa-solid fa-xmark text-danger"></i> Ne sera pas
+                                                            payé
                                                         </button>
                                                     </form>
                                                 </li>
@@ -333,12 +334,22 @@
                                                             </div>
                                                         @endif
                                                         <div class="row">
-                                                            <div class="col-md-12 mb-3">
+                                                            <div class="col-md-6 mb-3">
                                                                 <label for="estimation_montant" class="form-label">Estimation
                                                                     de la ressource</label>
-                                                                <input type="text" name="estimation_montant"
+                                                                <input type="text" name="estimation_montant" id="estimation_montant"
                                                                        class="form-control"
-                                                                       value="{{$ressource->estimation_montant === null ? 'Aucune estimation' : $ressource->estimation_montant }}"
+                                                                       value="{{$ressource->pivot->estimation_montant === null ? 'Aucune estimation' : $ressource->estimation_montant }}"
+                                                                       readonly>
+
+
+                                                            </div>
+                                                            <div class="col-md-6 mb-3">
+                                                                <label for="status" class="form-label">status
+                                                                    de la ressource</label>
+                                                                <input type="text" name="status" id="status"
+                                                                       class="form-control"
+                                                                       value="{{$ressource->pivot->status}}"
                                                                        readonly>
 
 
@@ -453,7 +464,7 @@
                                                                            name="estimation_montant"
                                                                            id="estimation_montant"
                                                                            placeholder="Saisir montant en FCFA"
-                                                                           value="{{$ressource->estimation_montant }}">
+                                                                           value="{{$ressource->pivot->estimation_montant }}">
 
                                                                 </div>
                                                                 <input type="hidden" name="no_estimation" value="0">
@@ -462,7 +473,7 @@
                                                                         <input class="form-check-input "
                                                                                name="no_estimation" type="checkbox"
                                                                                id="no_estimation"
-                                                                               {{$ressource->estimation_montant=== null ? 'checked' : ''}} value="1">
+                                                                               {{$ressource->pivot->estimation_montant=== null ? 'checked' : ''}} value="1">
                                                                         <label class="form-check-label "
                                                                                for="no_estimation">
                                                                             Je ne peux pas faire d'estimation de montant
@@ -506,7 +517,7 @@
 
                                                 <div>
                                                     <form
-                                                        action="{{route('updatemontant.ressources',['ressource'=>$ressource->id])}}"
+                                                        action="{{route('updatemontant.ressources',['ressource'=>$ressource->id,'demande'=>$demande->id])}}"
                                                         method="POST">
                                                         @method('PATCH')
                                                         @csrf
@@ -522,7 +533,7 @@
                                                                        name="estimation_montant"
                                                                        id="estimation_montant"
                                                                        placeholder="Saisir montant en FCFA"
-                                                                       value="{{$ressource->estimation_montant }}"
+                                                                       value="{{$ressource->pivot->estimation_montant }}"
                                                                        required>
 
                                                             </div>

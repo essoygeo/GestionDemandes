@@ -41,6 +41,7 @@ class DemandeController extends Controller
             'ressources.*' => 'exists:ressources,id',
 
         ]);
+
 //        if ($request->type === 'En stock') {
 //            $rules['estimation_montant'] = 'nullable';
 //        } else {
@@ -61,7 +62,27 @@ class DemandeController extends Controller
 //        return redirect()->route($route)
 //            ->with('warning','veuillez creer la/les ressources associée(s) à cette demande')
 //        ->with('success', 'demande créee avec sucess');
-        $demande->ressources()->attach($validated['ressources']);
+
+        $pivotData = [];
+        foreach ($validated['ressources'] as $ressourceId) {
+            $ressource = Ressource::findOrFail($ressourceId);
+//            $pivotData[$ressourceId] = [
+//                'status' => $ressource->status,
+//                'estimation_montant' => $ressource->estimation_montant
+//            ];
+            $demande->ressources()->attach([
+                $ressourceId=>[
+                    'status' => $ressource->status,
+                    'estimation_montant' => $ressource->estimation_montant
+                ]
+            ]);
+
+        }
+
+
+//        $demande->ressources()->attach($pivotData);
+//        dd($pivotData,$demande,$demande->ressources()->get());
+
 
         return redirect()->route('create.demandes')->with('success', 'Demande créee avec succès');
 
@@ -89,8 +110,10 @@ class DemandeController extends Controller
     {
         $categories = Categorie::all();
         $demande = Demande::with(['user', 'categorie', 'ressources.user', 'ressources.categorie', 'commentaires.user'])->findOrFail($id);
-        $ressources = $demande->ressources()->get();
-        $montantRessources = $demande->ressources()->sum('estimation_montant');
+        $ressources = $demande->ressources;
+        $montantRessources = $ressources->sum(function ($ressource) {
+            return $ressource->pivot->estimation_montant;
+        });
         $caisse_mtn_actuel = Caisse::first()->montant_init;
 //        if(!empty($demande->estimation_montant)) {
 //            // estimation existe et n'est pas nulle/0/""/false
@@ -165,7 +188,19 @@ class DemandeController extends Controller
 //            'estimation_montant' => $validated['estimation_montant'] ?? null,
 
         ]);
-        $demande->ressources()->sync($validated['ressources']);
+
+        foreach ($validated['ressources'] as $ressourceId) {
+            $ressource = Ressource::findOrFail($ressourceId);
+            $demande->ressources()->updateExistingPivot($ressource->id,
+                [
+                    'status' => $ressource->status,
+                    'estimation_montant' => $ressource->estimation_montant
+                ]
+            );
+
+        }
+
+
         //$route = Auth::user()->role ==='Employe' ? 'indexEmploye.demandes' : 'index.demandes';
 
         //return redirect()->route($route)->with('success', 'Demande modifiée avec succès');
@@ -188,34 +223,50 @@ class DemandeController extends Controller
     {
         $caisse = Caisse::first();
         $demande = Demande::findOrFail($id);
-        $resources = $demande->ressources;
-        $montRessources = $demande->ressources()->where('status', 'Payer')->sum('estimation_montant');
+        $ressources = $demande->ressources;
+        $montantRessources = $ressources
+            ->filter(function ($ressource) {
+                return $ressource->pivot->status === 'payer';
+            })
+            ->sum(function ($ressource) {
+                return $ressource->pivot->estimation_montant;
+            });
+
+        $allressourcesNonPayable = $ressources
+            ->every(function ($ressource) {
+                return $ressource->pivot->status === 'Ne sera pas payé';
+            });
 
         if ($demande->status === 'En attente') {
-            if ($caisse->montant_init > $montRessources) {
+            if ($caisse->montant_init > $montantRessources) {
 
                 // Vérifie s'il reste des ressources non encore traitées
-                foreach ($resources as $resource) {
-                    if ($resource->status === 'A payer') {
+                foreach ($ressources as $ressource) {
+                    if ($ressource->pivot->status === 'A payer') {
                         return redirect()->back()->with('error', 'Veuillez traiter toutes les ressources avant de valider refuser!');
                     }
                 }
+                //si tous les staatus sont ne sera pas payé impossile de valider mais que refusé
+                if ($allressourcesNonPayable) {
+                    return redirect()->back()->with('error', 'Vous ne pouvez pas valider cette demande car toutes les ressources ont le statut "Ne sera pas payé". Veuillez la refuser.');
 
-                // Toutes les ressources sont traitées, on peut créer les transactions
-                foreach ($resources as $resource) {
-                    if ($resource->status === 'Payer') {
+                }
+                // Toutes les ressources sont traitées, on peut créer les transactions pour ceux payer
+                foreach ($ressources as $ressource) {
+                    if ($ressource->pivot->status === 'Payer') {
                         Transaction::create([
                             'user_id' => Auth::id(),
                             'caisse_id' => $caisse->id,
                             'demande_id' => $demande->id,
-                            'montant_transaction' => $resource->estimation_montant,
+                            'montant_transaction' => $ressource->pivot->estimation_montant,
                             'type' => 'Sortie',
-                            'motif' => 'Sortie du montant de caisse à cause de la ressource #' . $resource->id,
+                            'motif' => 'Sortie du montant de caisse à cause de la ressource #' . $ressource->id,
                         ]);
                     }
+
                 }
 
-                $caisse->montant_init -= $montRessources;
+                $caisse->montant_init -= $montantRessources;
                 $caisse->save();
 
                 $demande->status = 'Validé';
@@ -233,13 +284,13 @@ class DemandeController extends Controller
     public function refuser(Request $request, $id)
     {
         $demande = Demande::findOrFail($id);
-        $resources = $demande->ressources;
+//        $resources = $demande->ressources;
         if ($demande->status === 'En attente') {
-            foreach ($resources as $resource) {
-                if ($resource->status === 'A payer') {
-                    return redirect()->back()->with('error', 'Veuillez traiter toutes les ressources avant de valider ou refuser !');
-                }
-            }
+//            foreach ($resources as $resource) {
+//                if ($resource->status === 'A payer') {
+//                    return redirect()->back()->with('error', 'Veuillez traiter toutes les ressources avant de valider ou refuser !');
+//                }
+//            }
             $demande->status = 'Refusé';
             $demande->save();
             return redirect()->route('index.demandes')->with('success', 'Demande refusée avec succès.');

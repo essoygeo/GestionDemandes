@@ -128,35 +128,49 @@
 {{--                                                        <i class="fa-solid fa-eye me-1 text-secondary"></i> Voir--}}
 {{--                                                    </a>--}}
 {{--                                                </li>--}}
+{{--                                                <li>--}}
+{{--                                                    <a class="dropdown-item text-success" href="{{ route('show.demandes', $demande->id) }}">--}}
+{{--                                                        <i class="fa-solid fa-check me-1 "></i> Valider--}}
+{{--                                                    </a>--}}
+{{--                                                </li>--}}
+{{--                                                <li>--}}
+{{--                                                    <a class="dropdown-item text-danger" href="{{ route('edit.demandes', $demande->id) }}">--}}
+{{--                                                        <i class="fa-solid fa-xmark me-1"></i> Refuser--}}
+{{--                                                    </a>--}}
+{{--                                                </li>--}}
+{{--                                                 @else--}}
+{{--                                                <li>--}}
+{{--                                                    <a class="dropdown-item " href="{{ route('edit.demandes', $demande->id) }}">--}}
+{{--                                                        <i class="fas fa-edit me-1 text-success"></i> Modifier--}}
+{{--                                                    </a>--}}
+{{--                                                </li>--}}
+{{--                                                <li>--}}
+{{--                                                    <form action="{{ route('destroy.demandes', $demande->id) }}" method="POST"--}}
+{{--                                                          onsubmit="return confirm('Supprimer cette demande ?');">--}}
+{{--                                                        @csrf--}}
+{{--                                                        @method('DELETE')--}}
+{{--                                                        <button class="dropdown-item text-danger" type="submit">--}}
+{{--                                                            <i class="fas fa-trash-alt me-1"></i> Supprimer--}}
+{{--                                                        </button>--}}
+{{--                                                    </form>--}}
+{{--                                                </li>--}}
+{{--                                            @endif--}}
                                                 <li>
-                                                    <a class="dropdown-item text-success" href="{{ route('show.demandes', $demande->id) }}">
-                                                        <i class="fa-solid fa-check me-1 "></i> Valider
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item text-danger" href="{{ route('edit.demandes', $demande->id) }}">
-                                                        <i class="fa-solid fa-xmark me-1"></i> Refuser
-                                                    </a>
-                                                </li>
-                                                 @else
-                                                <li>
-                                                    <a class="dropdown-item " href="{{ route('edit.demandes', $demande->id) }}">
-                                                        <i class="fas fa-edit me-1 text-success"></i> Modifier
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <form action="{{ route('destroy.demandes', $demande->id) }}" method="POST"
+                                                    <form method="POST" action="{{ route('destroy.demandes', $demande->id) }}"
                                                           onsubmit="return confirm('Supprimer cette demande ?');">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button class="dropdown-item text-danger" type="submit">
+                                                        <button type="submit" class="dropdown-item text-danger">
                                                             <i class="fas fa-trash-alt me-1"></i> Supprimer
                                                         </button>
                                                     </form>
-                                                </li>
-                                            @endif
-                                        @else
-                                            @if(Auth::user()->role === 'Admin'||Auth::user()->role === 'Comptable')
+                                        @endif
+                                            @if(Auth::user()->role === 'Admin')
+                                                    <li>
+                                                    <a class="dropdown-item " href="{{ route('edit.demandes', $demande->id) }}">
+                                                    <i class="fas fa-edit me-1 text-success"></i> Modifier
+                                                    </a>
+                                                     </li>
                                                 <li>
                                                     <form method="POST" action="{{ route('destroy.demandes', $demande->id) }}"
                                                           onsubmit="return confirm('Supprimer cette demande ?');">
@@ -169,11 +183,11 @@
                                                 </li>
                                             @endif
                                         @endif
-                                            <li>
-                                                <a class="dropdown-item " href="{{ route('show.demandes', $demande->id) }}">
-                                                    <i class="fas fa-comments me-1 text-success"></i> Commenter
-                                                </a>
-                                            </li>
+{{--                                            <li>--}}
+{{--                                                <a class="dropdown-item " href="{{ route('show.demandes', $demande->id) }}">--}}
+{{--                                                    <i class="fas fa-comments me-1 text-success"></i> Commenter--}}
+{{--                                                </a>--}}
+{{--                                            </li>--}}
                                     </ul>
                                 </div>
                             </td>

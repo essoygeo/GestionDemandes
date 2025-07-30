@@ -25,7 +25,8 @@ class Demande extends Model
 
     public function ressources(){
         return  $this->belongsToMany(
-            Ressource::class,'demandes_pivot_ressources');
+            Ressource::class,'demandes_pivot_ressources')
+            ->withPivot('status','estimation_montant');
     }
 
     public function transaction()
