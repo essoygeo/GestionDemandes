@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Caisse;
 use App\Models\Categorie;
 use App\Models\Demande;
+use App\Models\Notification;
 use App\Models\Ressource;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class DemandeController extends Controller
@@ -57,25 +59,47 @@ class DemandeController extends Controller
 
         ]);
 
+        $users = User::whereIn('role', ['Admin', 'Comptable'])->get();
+
+        foreach ($users as $user) {
+            Notification::create([
+                'user_id' => $user->id,
+                'message' => 'une demande vient d\'etre créee',
+
+            ]);
+        }
+
         //$route = Auth::user()->role ==='Employe' ? 'indexEmploye.demandes' : 'index.demandes';
+//        $user= Auth::user();
+        $url = route("message.index", ['demande' => $demande->id]);
+        envoyerMail($users, 'Une demande vient d\'etre créee !', 'Une demande vient d\'etre créee !', $url);
+
 
 //        return redirect()->route($route)
 //            ->with('warning','veuillez creer la/les ressources associée(s) à cette demande')
 //        ->with('success', 'demande créee avec sucess');
 
-        $pivotData = [];
+//        $pivotData = [];
         foreach ($validated['ressources'] as $ressourceId) {
             $ressource = Ressource::findOrFail($ressourceId);
 //            $pivotData[$ressourceId] = [
 //                'status' => $ressource->status,
 //                'estimation_montant' => $ressource->estimation_montant
 //            ];
-            $demande->ressources()->attach([
-                $ressourceId=>[
-                    'status' => $ressource->status,
-                    'estimation_montant' => $ressource->estimation_montant
-                ]
+//            $demande->ressources()->attach([
+//                    'status' => $ressource->status,
+//                    'estimation_montant' => $ressource->estimation_montant
+//                ]
+//            ]);
+
+            DB::table('demandes_pivot_ressources')->insert([
+                'demande_id' => $demande->id,
+                'ressource_id' => $ressource->id,
+                'status' => $ressource->status,
+                'estimation_montant' => $ressource->estimation_montant,
+
             ]);
+
 
         }
 
@@ -132,8 +156,9 @@ class DemandeController extends Controller
 //            session()->flash('info','Pas d\'estimation pour cette demande');
 //        }
 
+        $factures = $demande->factures()->get();
 
-        return view('demandes.show', compact('demande', 'ressources', 'categories', 'caisse_mtn_actuel', 'montantRessources'));
+        return view('demandes.show', compact('demande', 'ressources', 'categories', 'factures', 'caisse_mtn_actuel', 'montantRessources'));
     }
 
     public function destroy($id)
@@ -150,6 +175,15 @@ class DemandeController extends Controller
     public function edit($id)
     {
         $demande = Demande::findOrFail($id);
+        $curentuser = Auth::user();
+        if( $demande->user_id !== $curentuser->id && $curentuser->role !=='Admin' ){
+            abort(403,'Acces non autorisé');
+
+
+        }
+        elseif($demande->status !== 'En attente'){
+                   return redirect()->back()->with('error','Demande deja traitée Aucune modification n\'est autorisée !');
+        }
 
         $ressources = Ressource::all(); // toutes les ressources
         $ressourcesActuelles = $demande->ressources()->pluck('ressources.id')->toArray(); // les ID associés
@@ -160,6 +194,10 @@ class DemandeController extends Controller
 
     public function update(Request $request, $id)
     {
+
+
+
+
         $rules = [
             // 'categorie_id' => 'required',
 
@@ -189,22 +227,8 @@ class DemandeController extends Controller
 
         ]);
 
-        foreach ($validated['ressources'] as $ressourceId) {
-            $ressource = Ressource::findOrFail($ressourceId);
-            $demande->ressources()->updateExistingPivot($ressource->id,
-                [
-                    'status' => $ressource->status,
-                    'estimation_montant' => $ressource->estimation_montant
-                ]
-            );
 
-        }
-
-
-        //$route = Auth::user()->role ==='Employe' ? 'indexEmploye.demandes' : 'index.demandes';
-
-        //return redirect()->route($route)->with('success', 'Demande modifiée avec succès');
-
+        $demande->ressources()->sync($validated['ressources']);
         return redirect()->back()->with('success', 'Demande modifiée avec succès');
 
 
@@ -226,7 +250,7 @@ class DemandeController extends Controller
         $ressources = $demande->ressources;
         $montantRessources = $ressources
             ->filter(function ($ressource) {
-                return $ressource->pivot->status === 'payer';
+                return $ressource->pivot->status === 'Payer';
             })
             ->sum(function ($ressource) {
                 return $ressource->pivot->estimation_montant;
@@ -243,7 +267,7 @@ class DemandeController extends Controller
                 // Vérifie s'il reste des ressources non encore traitées
                 foreach ($ressources as $ressource) {
                     if ($ressource->pivot->status === 'A payer') {
-                        return redirect()->back()->with('error', 'Veuillez traiter toutes les ressources avant de valider refuser!');
+                        return redirect()->back()->with('error', 'Veuillez traiter toutes les ressources avant de valider  ou refuser!');
                     }
                 }
                 //si tous les staatus sont ne sera pas payé impossile de valider mais que refusé
@@ -272,6 +296,29 @@ class DemandeController extends Controller
                 $demande->status = 'Validé';
                 $demande->save();
 
+                $admins = User::where('role', 'Admin')->get();
+
+                // Envoyer notification à tous les admins
+                foreach ($admins as $admin) {
+                    Notification::create([
+                        'user_id' => $admin->id,
+                        'message' => "La demande #{$demande->id} a été validée.",
+                        'is_read' => false,
+                    ]);
+                }
+
+                // Envoyer notification à l'utilisateur qui a fait la demande
+                Notification::create([
+                    'user_id' => $demande->user_id,
+                    'message' => "Votre demande #{$demande->id} a été validée.",
+                    'is_read' => false,
+                ]);
+                //envoie email
+                $user = User::findOrFail($demande->user_id);
+                $url = route("message.index", ['demande' => $demande->id]);
+                envoyerMail( $user,'une demande validée', "Votre demande n°{$demande->id} a été validée.",$url);
+
+
                 return redirect()->route('index.demandes')->with('success', 'Demande validée avec succès.');
             } else {
                 return redirect()->back()->with('error', 'Montant de la caisse insuffisant !');
@@ -283,19 +330,35 @@ class DemandeController extends Controller
 
     public function refuser(Request $request, $id)
     {
+
         $demande = Demande::findOrFail($id);
-//        $resources = $demande->ressources;
+        $resources = $demande->ressources;
         if ($demande->status === 'En attente') {
-//            foreach ($resources as $resource) {
-//                if ($resource->status === 'A payer') {
-//                    return redirect()->back()->with('error', 'Veuillez traiter toutes les ressources avant de valider ou refuser !');
-//                }
-//            }
+            foreach ($resources as $resource) {
+                if ($resource->pivot->status === 'A payer') {
+                    return redirect()->back()->with('error', 'Veuillez traiter toutes les ressources avant de valider ou refuser !');
+                }
+            }
             $demande->status = 'Refusé';
             $demande->save();
+            //envoie notif
+            Notification::create([
+                'user_id' => $demande->user_id,
+                'message' => "Votre demande #{$demande->id} a été refusée.",
+
+            ]);
+
+
+            //envoie email
+            $user = User::findOrFail($demande->user_id);
+            $url = route("message.index", ['demande' => $demande->id]);
+            envoyerMail( $user,'une demande refusée', "Votre demande n°{$demande->id} a été refusée.",$url);
+
+
             return redirect()->route('index.demandes')->with('success', 'Demande refusée avec succès.');
 
         }
+
         return redirect()->back()->with('error', 'Demande déjà traitée.');
 
     }

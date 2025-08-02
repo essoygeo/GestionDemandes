@@ -4,6 +4,7 @@
     @include('partials.head')
 
     <title>@yield('title','Gestion des demandes')</title>
+    @yield('style')
 </head>
 
 
@@ -79,6 +80,7 @@
 </div>
 
 @include('partials.jsBody')
+@yield('script')
 </body>
 
 </html>

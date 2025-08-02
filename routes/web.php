@@ -10,6 +10,8 @@ use App\Http\Controllers\ComptableController;
 use App\Http\Controllers\controlDashbordController;
 use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\EmployeController;
+use App\Http\Controllers\FactureController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\RessourceController;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +34,11 @@ Route::get('/', [ControlDashbordController::class, 'index'])->name('controldashb
 
 //Demandes(commun)
 Route::middleware('auth')->group(function (){
+    Route::get('/messages/{demande}', [DemandeController::class, 'show'])->name('message.index');
+
+
+
+
     Route::get('/create/demande', [DemandeController::class, 'create'])->name('create.demandes');
     Route::post('/store/demande', [DemandeController::class, 'store'])->name('store.demandes');
     Route::get('/show/demande/{demande}', [DemandeController::class, 'show'])->name('show.demandes');
@@ -47,7 +54,7 @@ Route::middleware('auth')->group(function (){
     //Route::get('/show/ressource/{ressource}', [RessourceController::class, 'show'])->name('show.ressources');
     // Route::get('/edit/ressource/{ressource}', [RessourceController::class, 'edit'])->name('edit.ressources');
     Route::post('/store/ressource', [RessourceController::class, 'store'])->name('store.ressources');
-    Route::put('/update/ressource/{ressource}', [RessourceController::class, 'update'])->name('update.ressources');
+    Route::put('/update/ressource/{ressource}/{pivotId}', [RessourceController::class, 'update'])->name('update.ressources');
     Route::DELETE('/destroy/ressource/{ressource}', [RessourceController::class, 'destroy'])->name('destroy.ressources');
 
 // voir son profile(commun)
@@ -55,13 +62,18 @@ Route::middleware('auth')->group(function (){
     //resetPassword(commun)
     Route::get('/edit/password', [PasswordController::class, 'edit'])->name('edit.password');
     Route::put('/update/password', [PasswordController::class, 'update'])->name('update.password');
+//notifications(commun)
+    Route::post('/notifications/clear', [NotificationController::class, 'clear'])->name('notifications.clear');
+    Route::get('/notifications/user', [NotificationController::class, 'Allnotification'])->name('notifications.all');
+//dashboard employe (commun)
+    Route::get('/user/dashboard', [ControlDashbordController::class, 'employeDashboard'])->name('employe.dashboard');
 
 });
 
 
 //Admin
 Route::middleware('checkrole:Admin')->group(function (){
-    Route::get('/admin/dashboard', [AdminController::class, 'adminDashboard'])->name('admin.dashboard');
+    Route::get('/admin/dashboard', [ControlDashbordController::class, 'adminDashboard'])->name('admin.dashboard');
     Route::get('/admin/create/user', [AdminController::class, 'create'])->name('create.users');
     Route::post('/admin/store/user', [AdminController::class, 'store'])->name('store.users');
     Route::get('/admin/index/user', [AdminController::class, 'index'])->name('index.users');
@@ -89,11 +101,11 @@ Route::middleware('checkrole:Admin')->group(function (){
 
 //Comptable
 Route::middleware('checkrole:Comptable')->group(function (){
-    Route::get('/comptable/dashboard', [ComptableController::class, 'comptableDashboard'])->name('comptable.dashboard');
+    Route::get('/comptable/dashboard', [ControlDashbordController::class, 'adminDashboard'])->name('comptable.dashboard');
     //indexDemandeComptable
     Route::get('/comptable/index/demande', [DemandeController::class, 'indexUserDemande'])->name('indexcomptable.demandes');
-    Route::PATCH('/updateMontant/ressource/{ressource}/demande/{demande}', [RessourceController::class, 'updateMontant'])->name('updatemontant.ressources');
-    Route::PATCH('/ressourcestatus/ressource/{ressource}/demande/{demande}', [RessourceController::class, 'changeStatus'])->name('changestatus.ressources');
+    Route::PATCH('/updateMontant/{pivotId}', [RessourceController::class, 'updateMontant'])->name('updatemontant.ressources');
+    Route::PATCH('/ressourcestatus/{pivotId}', [RessourceController::class, 'changeStatus'])->name('changestatus.ressources');
     Route::post('/comptable/valider/demande/{demande}', [DemandeController::class, 'valider'])->name('valider.demandes');
     Route::post('/comptable/refuser/demande/{demande}', [DemandeController::class, 'refuser'])->name('refuser.demandes');
 
@@ -103,7 +115,6 @@ Route::middleware('checkrole:Comptable')->group(function (){
 
 //Employe
 Route::middleware('checkrole:Employe')->group(function (){
-    Route::get('/employe/dashboard', [EmployeController::class, 'employeDashboard'])->name('employe.dashboard');
     Route::get('/employe/index/demande', [DemandeController::class, 'indexUserDemande'])->name('indexemploye.demandes');
 
 });
@@ -122,6 +133,9 @@ Route::middleware(['checkrole:Admin,Comptable'])->group(function (){
     //Route::get('/comptable/edit/caisse/{caisse}', [caisseController::class, 'edit'])->name('edit.caisse');
     Route::put('/update/caisse/{caisse}', [caisseController::class, 'update'])->name('update.caisse');
     //Route::DELETE('/comptable/destroy/caisse/{caisse}', [CategorieController::class, 'destroy'])->name('destroy.caisse');
+//factures riute
+    Route::post('facture/{demande_id}', [\App\Http\Controllers\FactureController::class, 'store'])->name('facture.store');
+    Route::delete('/facture/{id}', [FactureController::class, 'destroy'])->name('facture.destroy');
 
 });
 

@@ -7,6 +7,7 @@ use App\Models\Demande;
 use App\Models\Ressource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RessourceController extends Controller
 {
@@ -76,48 +77,61 @@ class RessourceController extends Controller
 
 
     }
-    public function update(Request $request,$id)
+    public function update(Request $request, $ressourceId, $pivotId)
     {
-        $ressource = Ressource::findOrFail($id);
-        $rules = ([
+        $ressource = Ressource::findOrFail($ressourceId);
+
+        //  Gérer no_estimationX
+        $noEstimationField = 'no_estimation' . $pivotId;
+        $noEstimationValue = $request->input($noEstimationField, '0');
+        $noEstimation = $noEstimationValue == '1'; // true si coché
+
+        // Définir les règles de validation
+        $rules = [
             'categorie_id' => 'required',
             'nom' => 'required|string',
-            'estimation_montant' => $request->no_estimation
-                ? 'nullable'
-                : 'required|numeric|min:0',
+            'estimation_montant' . $pivotId => $noEstimation
+                ? 'nullable'           // si coché → pas obligatoire
+                : 'required|numeric|min:0', // sinon → obligatoire
+        ];
 
+        $categorie = $ressource->categorie;
 
+        if (in_array(strtolower($categorie->nom), ['logicielle', 'logicielles', 'logiciels', 'logiciel'])) {
+            $rules['marque'] = 'nullable|string';
+            $rules['model'] = 'nullable|string';
+        } elseif (in_array(strtolower($categorie->nom), ['materielle', 'materielles', 'materiels', 'materiel'])) {
+            $rules['marque'] = 'required|string';
+            $rules['model'] = 'required|string';
+        }
 
-        ]);
-             $categorie = $ressource->categorie;
-             if (in_array(strtolower($categorie->nom),['logicielle','logicielles','logiciels','logiciel']) ){
-
-                $rules ['marque'] = 'nullable|string';
-                $rules ['model'] = 'nullable|string';
-
-
-                           }
-
-             elseif (in_array(strtolower($categorie->nom),['materielle','materielles','materiels','materiel'])){
-
-                 $rules ['marque'] = 'required|string';
-                 $rules ['model'] = 'required|string';
-
-             }
+        //  Valider les données
         $validated = $request->validate($rules);
 
+
+        //  Déterminer la valeur de estimation_montant
+        //      → Si case cochée : forcer à null
+        //      → Sinon : prendre la valeur soumise
+
+
+
+        //  5. Mettre à jour la ressource
         $ressource->update([
             'categorie_id' => $validated['categorie_id'],
             'user_id' => Auth::id(),
             'nom' => $validated['nom'],
             'marque' => $validated['marque'] ?? null,
             'model' => $validated['model'] ?? null,
-
-            'estimation_montant' => $validated['estimation_montant'] ?? null,
-
         ]);
 
-        return redirect()->back()->with('success', 'ressource modifiée avec succès');
+        //  6. Mettre à jour le champ dans la table pivot
+        DB::table('demandes_pivot_ressources')
+            ->where('id', $pivotId)
+            ->update([
+                'estimation_montant' => $request->input('estimation_montant' . $pivotId) ?? null,
+            ]);
+
+        return redirect()->back()->with('success', 'Ressource modifiée avec succès');
     }
 
 
@@ -129,22 +143,32 @@ class RessourceController extends Controller
     }
 
 
-    public function changeStatus(Request $request,$ressourceId,$demandeId)
+    public function changeStatus(Request $request,$pivotId)
     {
-        $demande = Demande::findOrFail($demandeId);
-         $demande->ressources()->updateExistingPivot($ressourceId,[
-            'status'=>$request->nouveau_status,
+//        $demande = Demande::findOrFail($demandeId);
+//         $demande->ressources()->updateExistingPivot($ressourceId,[
+//            'status'=>$request->nouveau_status,
+//        ]);
+
+        DB::table('demandes_pivot_ressources')->where('id', $pivotId)->update([
+            'status' => $request->nouveau_status,
+
         ]);
 
         return back()->with('success', 'Statut de la ressource mis à jour.');
     }
 
-    public function updateMontant(Request $request,$ressourceId,$demandeId)
+    public function updateMontant(Request $request,$pivotId)
     {
-        $demande = Demande::findOrFail($demandeId);
-        $demande->ressources()->updateExistingPivot($ressourceId,[
-            'estimation_montant'=>$request->estimation_montant,
+        DB::table('demandes_pivot_ressources')->where('id', $pivotId)->update([
+            'estimation_montant' => $request->estimation_montant,
+
         ]);
+        //dd($request->estimation_montant);
+
+
+
+
 
         return back()->with('success', 'montant mise à jour de la ressource.');
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Commentaire;
 use App\Models\Demande;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,6 +31,14 @@ class CommentaireController extends Controller
 
        ]);
 
-       return redirect()->route('show.demandes',['demande'=>$id])->with('success','commentaire ajouté avec succes');
+        Notification::create([
+            'user_id' => $admin->id,
+            'message' => "La demande #{$demande->id} a été validée.",
+            'is_read' => false,
+        ]);
+
+
+
+return redirect()->route('show.demandes',['demande'=>$id])->with('success','commentaire ajouté avec succes');
     }
 }

@@ -19,12 +19,9 @@ return new class extends Migration
                 ->on('demandes')
                 ->onDelete('cascade');
 
+            $table->string('filesize');
 
             $table->string('path_image');
-            $table->decimal('montant',10,2);
-            $table->string('fournisseur');
-            $table->string('nom_article');
-            $table->integer('quantite_achete');
             $table->date('date');
 
 

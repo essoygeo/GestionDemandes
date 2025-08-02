@@ -34,9 +34,9 @@
                     <tbody>
                     @foreach($demandes as $demande)
                         <tr>
-                            <td>{{ $demande->id }}</td>
+                            <td class="text-center align-middle">{{ $demande->id }}</td>
 {{--                            <td>{{ $demande->categorie->nom }}</td>--}}
-                            <td>{{ $demande->user->nom }}</td>
+                            <td class="text-center align-middle">{{ $demande->user->nom }}</td>
 
 
                             <td class="text-center align-middle">

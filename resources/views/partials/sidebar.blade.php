@@ -10,19 +10,20 @@
 
     <hr class="sidebar-divider my-0">
 
-    <!-- Dashboard -->
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span>
-        </a>
-    </li>
+
 
     <hr class="sidebar-divider">
     <div class="sidebar-heading">Interface</div>
 
     <!-- Admin Section -->
     @if(Auth::user()->role === 'Admin')
+        <!-- Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('admin.dashboard')}}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span> Admin dashboard</span>
+            </a>
+        </li>
         <!-- Utilisateurs -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers"
@@ -84,6 +85,14 @@
 
     <!-- Comptable Section -->
     @if(Auth::user()->role === 'Comptable')
+        <!-- Dashboard -->
+
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('admin.dashboard')}}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span> Comptable dashboard</span>
+            </a>
+        </li>
         <!-- Demandes -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDemandesComptable"
@@ -129,6 +138,13 @@
 
     <!-- Employé Section -->
     @if(Auth::user()->role === 'Employe')
+        <!-- Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('employe.dashboard')}}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
         <!-- Demandes -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDemandesEmploye"

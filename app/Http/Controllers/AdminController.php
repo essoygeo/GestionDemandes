@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
     public function adminDashboard()
     {
-//        dd('+65+6');
+
         return view('welcome.welcome');
     }
 
@@ -46,9 +47,13 @@ class AdminController extends Controller
         return view('users.index', compact('users'));
     }
 
-    public function show($user)
+    public function show($id)
     {
-        $user = User::findOrFail($user);
+        $user = User::findOrFail($id);
+       $curentuser =  Auth::user();
+        if( $user->id !== $curentuser->id && $curentuser->role !=='Admin' ){
+            abort(403,'Acces non autorisé');
+        }
 
         return view('users.show', compact('user'));
     }
