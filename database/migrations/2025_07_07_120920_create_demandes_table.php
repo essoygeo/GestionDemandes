@@ -21,11 +21,11 @@ return new class extends Migration
 
 
 
-            $table->unsignedBigInteger('validateur_id')->nullable();
-            $table->foreign('validateur_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('set null');
+//            $table->unsignedBigInteger('validateur_id')->nullable();
+//            $table->foreign('validateur_id')
+//                ->references('id')
+//                ->on('users')
+//                ->onDelete('set null');
 
             $table->string('titre');
             $table->text('raison');

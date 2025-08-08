@@ -68,5 +68,8 @@ class User extends Authenticable
         return $this->hasMany(Notification::class);
     }
 
-
+    public function ressources()
+    {
+        return $this->hasMany(Ressource::class);
+    }
 }

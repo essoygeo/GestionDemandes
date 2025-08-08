@@ -164,7 +164,10 @@
                                                             <i class="fas fa-trash-alt me-1"></i> Supprimer
                                                         </button>
                                                     </form>
+
+
                                         @endif
+
                                             @if(Auth::user()->role === 'Admin')
                                                     <li>
                                                     <a class="dropdown-item " href="{{ route('edit.demandes', $demande->id) }}">
@@ -182,7 +185,22 @@
                                                     </form>
                                                 </li>
                                             @endif
+                                        @else
+                                            @if(Auth::user()->role === 'Admin')
+                                                <li>
+                                                    <form method="POST" action="{{ route('destroy.demandes', $demande->id) }}"
+                                                          onsubmit="return confirm('Supprimer cette demande ?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="dropdown-item text-danger">
+                                                            <i class="fas fa-trash-alt me-1"></i> Supprimer
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            @endif
                                         @endif
+
+
 {{--                                            <li>--}}
 {{--                                                <a class="dropdown-item " href="{{ route('show.demandes', $demande->id) }}">--}}
 {{--                                                    <i class="fas fa-comments me-1 text-success"></i> Commenter--}}

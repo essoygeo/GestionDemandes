@@ -172,5 +172,17 @@ class RessourceController extends Controller
 
         return back()->with('success', 'montant mise à jour de la ressource.');
     }
+
+
+
+    public function indexUserRessource()
+    {
+        $user = Auth::user();
+        $categories = Categorie::all();
+        $ressources = $user->ressources()->with('categorie')->paginate(10);
+
+        return view('ressources.ressource_user', compact('ressources','categories'));
+    }
+
 }
 

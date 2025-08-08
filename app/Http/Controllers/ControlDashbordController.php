@@ -66,10 +66,18 @@ class ControlDashbordController extends Controller
                 return $demande;
             }
 
+
+
+
+
             );
 
         // Caisse (s’il y en a une seule)
         $caisse = Caisse::first();
+//        $nombreDemande_ressource_paye = Demande::whereHas('ressources', function ($query) {
+//            $query->where('demandes_pivot_ressources.status', 'Payer');
+//         })->count();
+
 
         return view('welcome.dashboard_admin', compact(
             'en_attente',
@@ -79,7 +87,8 @@ class ControlDashbordController extends Controller
             'last_demandes',
             'caisse',
             'totaldemandes',
-            'total_depenses'
+            'total_depenses',
+        
         ));
     }
 

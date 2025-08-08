@@ -138,6 +138,13 @@ class DemandeController extends Controller
         $montantRessources = $ressources->sum(function ($ressource) {
             return $ressource->pivot->estimation_montant;
         });
+
+        $curentuser = Auth::user();
+        if( $demande->user_id !== $curentuser->id && $curentuser->role =='Employe' ){
+            abort(403,'Acces non autorisé');
+
+
+        }
         $caisse_mtn_actuel = Caisse::first()->montant_init;
 //        if(!empty($demande->estimation_montant)) {
 //            // estimation existe et n'est pas nulle/0/""/false
@@ -165,6 +172,16 @@ class DemandeController extends Controller
     {
         $demande = Demande::findOrFail($id);
         $demande->delete();
+
+        $users = User::whereIn('role', ['Admin', 'Comptable'])->get();
+       $current = Auth::user();
+        foreach ($users as $user) {
+            Notification::create([
+                'user_id' => $user->id,
+                'message' => "la demande #{$id}  a été suprimée par  l'utilisateur {$current->nom}",
+
+            ]);
+        }
 
         //$route = Auth::user()->role ==='Employe' ? 'indexEmploye.demandes' : 'index.demandes';
         //return redirect()->route($route)->with('success', 'demande suprimée avec sucess');
@@ -262,13 +279,17 @@ class DemandeController extends Controller
             });
 
         if ($demande->status === 'En attente') {
-            if ($caisse->montant_init > $montantRessources) {
+            if ($caisse->montant_init >= $montantRessources) {
 
                 // Vérifie s'il reste des ressources non encore traitées
                 foreach ($ressources as $ressource) {
                     if ($ressource->pivot->status === 'A payer') {
                         return redirect()->back()->with('error', 'Veuillez traiter toutes les ressources avant de valider  ou refuser!');
+
                     }
+
+
+
                 }
                 //si tous les staatus sont ne sera pas payé impossile de valider mais que refusé
                 if ($allressourcesNonPayable) {
@@ -278,6 +299,9 @@ class DemandeController extends Controller
                 // Toutes les ressources sont traitées, on peut créer les transactions pour ceux payer
                 foreach ($ressources as $ressource) {
                     if ($ressource->pivot->status === 'Payer') {
+                        if ($ressource->pivot->estimation_montant === null) {
+                            return redirect()->back()->with('error', 'Merci d’indiquer le montant estimé pour chaque ressource marquée comme "Payer" avant de valider.');
+                        }
                         Transaction::create([
                             'user_id' => Auth::id(),
                             'caisse_id' => $caisse->id,
@@ -332,11 +356,15 @@ class DemandeController extends Controller
     {
 
         $demande = Demande::findOrFail($id);
-        $resources = $demande->ressources;
+        $ressources = $demande->ressources;
         if ($demande->status === 'En attente') {
-            foreach ($resources as $resource) {
-                if ($resource->pivot->status === 'A payer') {
+            foreach ($ressources as $ressource) {
+                if ($ressource->pivot->status === 'A payer') {
                     return redirect()->back()->with('error', 'Veuillez traiter toutes les ressources avant de valider ou refuser !');
+                }
+                if($ressource->pivot->status === 'Payer'){
+                    return redirect()->back()->with('error', 'Vous ne pouvez pas refuser une demande avec au moins une ressource avec un status Payer! ');
+
                 }
             }
             $demande->status = 'Refusé';

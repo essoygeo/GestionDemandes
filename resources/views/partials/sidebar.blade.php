@@ -71,10 +71,25 @@
             </div>
         </li>
 
+{{--        <li class="nav-item">--}}
+{{--            <a class="nav-link" href="{{ route('index.ressources') }}">--}}
+{{--                <i class="fas fa-briefcase"></i> <span>Toutes les ressources</span>--}}
+{{--            </a>--}}
+{{--        </li>--}}
+
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('index.ressources') }}">
-                <i class="fas fa-briefcase"></i> <span>Toutes les ressources</span>
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRessource"
+               aria-expanded="true" aria-controls="collapseRessource">
+                <i class="fas fa-briefcase"></i>
+                <span>Ressources</span>
             </a>
+            <div id="collapseRessource" class="collapse" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Actions :</h6>
+                    <a class="collapse-item" href="{{ route('index.ressources') }}">Toutes les ressources</a>
+                    <a class="collapse-item" href="{{ route('indexadmin.ressources') }}">Mes ressources</a>
+                </div>
+            </div>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('index.caisse') }}">
@@ -130,9 +145,18 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('index.ressources') }}">
-                <i class="fas fa-briefcase"></i> <span>Toutes les ressources</span>
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseComptRessource"
+               aria-expanded="true" aria-controls="collapseComptRessource">
+                <i class="fas fa-briefcase"></i>
+                <span>Ressources</span>
             </a>
+            <div id="collapseComptRessource" class="collapse" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Actions :</h6>
+                    <a class="collapse-item" href="{{ route('index.ressources') }}">Toutes les ressources</a>
+                    <a class="collapse-item" href="{{ route('indexcomptable.ressources') }}">Mes ressources</a>
+                </div>
+            </div>
         </li>
     @endif
 
@@ -160,7 +184,19 @@
                 </div>
             </div>
         </li>
-
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEmplRessource"
+               aria-expanded="true" aria-controls="collapseEmplRessource">
+                <i class="fas fa-briefcase"></i>
+                <span>Ressources</span>
+            </a>
+            <div id="collapseEmplRessource" class="collapse" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Actions :</h6>
+                    <a class="collapse-item" href="{{ route('indexemploye.ressources') }}">Mes ressources</a>
+                </div>
+            </div>
+        </li>
     @endif
 
     <hr class="sidebar-divider d-none d-md-block">

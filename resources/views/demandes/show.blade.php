@@ -63,7 +63,7 @@
                     @endif
                 </div>
                 <div class="col-md-6 mb-3">
-                    <strong>Date :</strong> {{$demande->created_at->format('y/m/d')}}
+                    <strong>Date :</strong> {{$demande->created_at->format('d/m/y')}}
                 </div>
                 @if(Auth::user()->role === 'Admin'|| Auth::user()->role === 'Comptable')
                     <div class="col-md-6 ">
@@ -166,89 +166,93 @@
 
                                 </td>
                                 <td class="text-center align-middle">
-                                    <div class="dropup">
-                                        <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button"
-                                                data-bs-toggle="dropdown">
-                                            Actions
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-end">
-                                            <li>
-                                                <a class="dropdown-item"
-                                                   href="#"
-                                                   data-bs-toggle="modal"
-                                                   data-bs-target="#showRessourceModal{{ $ressource->pivot->id }}">
-                                                    <i class="fa-solid fa-eye me-1 text-success"></i> Voir
-                                                </a>
-                                            </li>
-                                            @if(Auth::user()->role === 'Admin'||Auth::user()->role === 'Employe')
-                                                @if($demande->status === 'En attente')
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+
+                                        <div class="dropup">
+                                            <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button"
+                                                    data-bs-toggle="dropdown">
+                                                Actions
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                       href="#"
+                                                       data-bs-toggle="modal"
+                                                       data-bs-target="#showRessourceModal{{ $ressource->pivot->id }}">
+                                                        <i class="fa-solid fa-eye me-1 text-success"></i> Voir
+                                                    </a>
+                                                </li>
+
+                                                {{-- Boutons conditionnels --}}
+                                                @if(Auth::user()->role === 'Admin' || Auth::user()->role === 'Employe')
+                                                    @if($demande->status === 'En attente')
+                                                        <li>
+                                                            <a class="dropdown-item"
+                                                               href="#"
+                                                               data-bs-toggle="modal"
+                                                               data-bs-target="#editRessourceModal{{$ressource->pivot->id}}">
+                                                                <i class="fas fa-edit me-1 text-success"></i> Modifier
+                                                            </a>
+                                                        </li>
+                                                    @endif
+                                                @endif
+
+                                                @if(Auth::user()->role === 'Comptable' && $demande->status === 'En attente')
                                                     <li>
-                                                        <a class="dropdown-item "
-                                                           href="#"
-                                                           data-bs-toggle="modal"
-                                                           data-bs-target="#editRessourceModal{{$ressource->id}}">
-                                                            <i class="fas fa-edit me-1 text-success"></i> Modifier
-                                                        </a>
+                                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                                data-bs-target="#editMontant{{ $ressource->pivot->id }}">
+                                                            <i class="fa-solid fa-edit text-success"></i> Modifier montant
+                                                        </button>
                                                     </li>
 
+                                                    <li>
+                                                        <form action="{{route('changestatus.ressources',['pivotId'=>$ressource->pivot->id])}}" method="post">
+                                                            @method('PATCH')
+                                                            @csrf
+                                                            <input type="hidden" name="nouveau_status" value="Payer">
+                                                            <button type="submit" class="dropdown-item">
+                                                                <i class="fa-solid fa-check text-success"></i> Payer
+                                                            </button>
+                                                        </form>
+                                                    </li>
+
+                                                    <li>
+                                                        <form action="{{route('changestatus.ressources',['pivotId'=>$ressource->pivot->id])}}" method="post">
+                                                            @method('PATCH')
+                                                            @csrf
+                                                            <input type="hidden" name="nouveau_status" value="En stock">
+                                                            <button type="submit" class="dropdown-item">
+                                                                <i class="fa-solid fa-box text-primary"></i> En stock
+                                                            </button>
+                                                        </form>
+                                                    </li>
+
+                                                    <li>
+                                                        <form action="{{route('changestatus.ressources',['pivotId'=>$ressource->pivot->id])}}" method="post">
+                                                            @method('PATCH')
+                                                            @csrf
+                                                            <input type="hidden" name="nouveau_status" value="Ne sera pas payé">
+                                                            <button type="submit" class="dropdown-item">
+                                                                <i class="fa-solid fa-xmark text-danger"></i> Ne sera pas payé
+                                                            </button>
+                                                        </form>
+                                                    </li>
                                                 @endif
-                                            @endif
-                                            @if(Auth::user()->role === 'Comptable'&& $demande->status === 'En attente')
-                                                <li>
+                                            </ul>
+                                        </div>
+                                        @if(Auth::user()->role === 'Comptable' && $demande->status === 'En attente' && $demande->user_id === Auth::id())
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-success"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editRessourceModal{{ $ressource->pivot->id }}"
+                                                    title="Modifier la ressource">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+                                        @endif
 
-
-                                                    <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                            data-bs-target="#editMontant{{ $ressource->pivot->id }}">
-                                                        <i class="fa-solid fa-edit text-success"></i> modifier
-                                                        montant
-                                                    </button>
-
-
-                                                </li>
-
-                                                <li>
-                                                    <form
-                                                        action="{{route('changestatus.ressources',['pivotId'=>$ressource->pivot->id])}}"
-                                                        method="post">
-                                                        @method('PATCH')
-                                                        @csrf
-                                                        <input type="hidden" name="nouveau_status" value="Payer">
-                                                        <button type="submit" class="dropdown-item">
-                                                            <i class="fa-solid fa-check text-success"></i> Payer
-                                                        </button>
-                                                    </form>
-
-                                                </li>
-                                                <li>
-                                                    <form
-                                                        action="{{route('changestatus.ressources',['pivotId'=>$ressource->pivot->id])}}"
-                                                        method="post">
-                                                        @method('PATCH')
-                                                        @csrf
-                                                        <input type="hidden" name="nouveau_status" value="En stock">
-                                                        <button type="submit" class="dropdown-item">
-                                                            <i class="fa-solid fa-box text-primary"></i> En stock
-                                                        </button>
-                                                    </form>
-                                                </li>
-                                                <li>
-                                                    <form
-                                                        action="{{route('changestatus.ressources',['pivotId'=>$ressource->pivot->id])}}"
-                                                        method="post">
-                                                        @method('PATCH')
-                                                        @csrf
-                                                        <input type="hidden" name="nouveau_status"
-                                                               value="Ne sera pas payé">
-                                                        <button type="submit" class="dropdown-item">
-                                                            <i class="fa-solid fa-xmark text-danger"></i> Ne sera pas
-                                                            payé
-                                                        </button>
-                                                    </form>
-                                                </li>
-                                            @endif
-                                        </ul>
                                     </div>
                                 </td>
+
                             </tr>
                             {{-- modal de show ressorce--}}
                             <!-- Modal -->
@@ -328,6 +332,7 @@
                                                                 </div>
                                                             </div>
                                                         @endif
+
                                                         <div class="row">
                                                             <div class="col-md-6 mb-3">
                                                                 <label for="estimation_montant" class="form-label">Estimation
@@ -335,7 +340,8 @@
                                                                 <input type="text" name="estimation_montant{{ $ressource->pivot->id }}"
                                                                        id="estimation_montant{{ $ressource->pivot->id }}"
                                                                        class="form-control"
-                                                                       value="{{$ressource->pivot->estimation_montant === null ? 'Aucune estimation' : $ressource->pivot->estimation_montant }}"
+                                                                       value="{{$ressource->pivot->estimation_montant ?? '' }}"
+                                                                       placeholder="Aucune estimation"
                                                                        readonly>
 
 
@@ -362,13 +368,13 @@
                                 </div>
                             </div>
                             {{--modal editRessource--}}
-                            <div class="modal fade" id="editRessourceModal{{$ressource->id}}" tabindex="-1"
+                            <div class="modal fade" id="editRessourceModal{{$ressource->pivot->id}}" tabindex="-1"
                                  aria-labelledby="editRessourceModal{{$ressource->id}}" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
 
                                         <div class="modal-header bg-success-subtle">
-                                            <h5 class="modal-title" id="editRessourceModalLabel{{$ressource->id}}">Formulaire de
+                                            <h5 class="modal-title" id="editRessourceModalLabel{{$ressource->pivot->id}}">Formulaire de
                                                 modification de la
                                                 ressource</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -390,7 +396,7 @@
                                                             <label for="categorie_id" class="form-label">Catégorie de la
                                                                 Ressource</label>
                                                             <select class="form-select categorie-select"
-                                                                    data-id="{{$ressource->id}}"
+                                                                    data-id="{{$ressource->pivot->id}}"
                                                                     name="categorie_id"
                                                             >
                                                                 @foreach($categories as $categorie)
@@ -424,22 +430,22 @@
 
                                                         <div class="row">
                                                             <div class="col-md-6 mb-3"
-                                                                 id="marque_div{{$ressource->id}}">
+                                                                 id="marque_div{{$ressource->pivot->id}}">
                                                                 <label for="marque" class="form-label">Marque de la
                                                                     ressource
                                                                     matérielle</label>
                                                                 <input type="text" class="form-control"
                                                                        name="marque"
-                                                                       id="marque{{$ressource->id}}"
+                                                                       id="marque{{$ressource->pivot->id}}"
                                                                        value="{{ $ressource->marque }}">
                                                             </div>
-                                                            <div class="col-md-6 mb-3" id="model_div{{$ressource->id}}">
+                                                            <div class="col-md-6 mb-3" id="model_div{{$ressource->pivot->id}}">
                                                                 <label for="model" class="form-label">Modèle de la
                                                                     ressource
                                                                     matérielle</label>
                                                                 <input type="text" class="form-control" name="model"
-                                                                       id="model{{$ressource->id}}"
-                                                                       value="{{ $ressource->model }}">
+                                                                       id="model{{$ressource->pivot->id}}"
+                                                                       value="{{$ressource->model}}">
                                                             </div>
                                                             <div class="row mb-3">
                                                                 <!-- Champ montant -->

@@ -4,7 +4,7 @@
 @section('content')
     <div class="card shadow-sm border-0">
         <div class="card-header bg-white">
-            <h5 class="mb-3">Liste des ressources</h5>
+            <h5 class="mb-3">Liste de mes ressources</h5>
             {{--            <a class="mb-0 btn btn-sm btn-outline-success " href="{{route('create.categories')}}">+ Creer categorie</a>--}}
         </div>
         <div class="card-body">
@@ -34,12 +34,12 @@
                             creation
                         </th>
                         <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">
-                           estimation à la creation
+                            estimation à la creation
                         </th>
-{{--                        <th class="text-primary-emphasis text-center align-middle" style="width: 200px;">Demandes--}}
-{{--                            associées--}}
+                        {{--                        <th class="text-primary-emphasis text-center align-middle" style="width: 200px;">Demandes--}}
+                        {{--                            associées--}}
 
-{{--                        </th>--}}
+                        {{--                        </th>--}}
 
                         <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Actions
                         </th>
@@ -77,19 +77,19 @@
                                 @endif
 
                             </td>
-{{--                            <td class="text-center align-middle">--}}
-{{--                                @if($ressource->demandes->isEmpty())--}}
-{{--                                    <small class="text-primary-emphasis">Aucune demande associée</small>--}}
-{{--                                @else--}}
-{{--                                    @foreach($ressource->demandes as $demande)--}}
-{{--                                        <span>{{ $demande->titre }} </span>--}}
-{{--                                        @if(!$loop->last)--}}
-{{--                                            <span> | </span>--}}
-{{--                                        @endif--}}
-{{--                                    @endforeach--}}
-{{--                                @endif--}}
+                            {{--                            <td class="text-center align-middle">--}}
+                            {{--                                @if($ressource->demandes->isEmpty())--}}
+                            {{--                                    <small class="text-primary-emphasis">Aucune demande associée</small>--}}
+                            {{--                                @else--}}
+                            {{--                                    @foreach($ressource->demandes as $demande)--}}
+                            {{--                                        <span>{{ $demande->titre }} </span>--}}
+                            {{--                                        @if(!$loop->last)--}}
+                            {{--                                            <span> | </span>--}}
+                            {{--                                        @endif--}}
+                            {{--                                    @endforeach--}}
+                            {{--                                @endif--}}
 
-{{--                            </td>--}}
+                            {{--                            </td>--}}
                             <td class="text-center align-middle">
                                 <div class="dropup">
                                     <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button"
@@ -105,19 +105,19 @@
                                                 <i class="fa-solid fa-eye me-1 text-success"></i> Voir
                                             </a>
                                         </li>
-{{--                                        @if(Auth::user()->role ==='Admin')--}}
-{{--                                            <li>--}}
-{{--                                                <form action="{{ route('destroy.ressources',  $ressource->id) }}"--}}
-{{--                                                      method="POST"--}}
-{{--                                                      onsubmit="return confirm('Supprimer cette ressource ?');">--}}
-{{--                                                    @csrf--}}
-{{--                                                    @method('DELETE')--}}
-{{--                                                    <button class="dropdown-item text-danger" type="submit">--}}
-{{--                                                        <i class="fas fa-trash-alt me-1"></i> Supprimer--}}
-{{--                                                    </button>--}}
-{{--                                                </form>--}}
-{{--                                            </li>--}}
-{{--                                        @endif--}}
+                                        {{--                                        @if(Auth::user()->role ==='Admin')--}}
+                                        {{--                                            <li>--}}
+                                        {{--                                                <form action="{{ route('destroy.ressources',  $ressource->id) }}"--}}
+                                        {{--                                                      method="POST"--}}
+                                        {{--                                                      onsubmit="return confirm('Supprimer cette ressource ?');">--}}
+                                        {{--                                                    @csrf--}}
+                                        {{--                                                    @method('DELETE')--}}
+                                        {{--                                                    <button class="dropdown-item text-danger" type="submit">--}}
+                                        {{--                                                        <i class="fas fa-trash-alt me-1"></i> Supprimer--}}
+                                        {{--                                                    </button>--}}
+                                        {{--                                                </form>--}}
+                                        {{--                                            </li>--}}
+                                        {{--                                        @endif--}}
                                     </ul>
                                 </div>
                             </td>

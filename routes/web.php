@@ -32,13 +32,13 @@ Auth::routes([
 ]);
 Route::get('/', [ControlDashbordController::class, 'index'])->name('controldashbord')->middleware('auth');
 
-//Demandes(commun)
+//route pour email des demande
 Route::middleware('auth')->group(function (){
     Route::get('/messages/{demande}', [DemandeController::class, 'show'])->name('message.index');
 
 
 
-
+//Demandes(commun)
     Route::get('/create/demande', [DemandeController::class, 'create'])->name('create.demandes');
     Route::post('/store/demande', [DemandeController::class, 'store'])->name('store.demandes');
     Route::get('/show/demande/{demande}', [DemandeController::class, 'show'])->name('show.demandes');
@@ -94,7 +94,8 @@ Route::middleware('checkrole:Admin')->group(function (){
 
 //indexDemandeAdmin
     Route::get('/admin/index/demande', [DemandeController::class, 'indexUserDemande'])->name('indexadmin.demandes');
-//indexRessources
+//indexRessourceAdmin
+    Route::get('/admin/index/ressource', [RessourceController::class, 'indexUserRessource'])->name('indexadmin.ressources');
 
 });
 
@@ -104,8 +105,14 @@ Route::middleware('checkrole:Comptable')->group(function (){
     Route::get('/comptable/dashboard', [ControlDashbordController::class, 'adminDashboard'])->name('comptable.dashboard');
     //indexDemandeComptable
     Route::get('/comptable/index/demande', [DemandeController::class, 'indexUserDemande'])->name('indexcomptable.demandes');
+    //indexRessourceComptale
+    Route::get('/comptable/index/ressource', [RessourceController::class, 'indexUserRessource'])->name('indexcomptable.ressources');
+
+    //changer status
     Route::PATCH('/updateMontant/{pivotId}', [RessourceController::class, 'updateMontant'])->name('updatemontant.ressources');
+    //modifier montant
     Route::PATCH('/ressourcestatus/{pivotId}', [RessourceController::class, 'changeStatus'])->name('changestatus.ressources');
+    //validation demande
     Route::post('/comptable/valider/demande/{demande}', [DemandeController::class, 'valider'])->name('valider.demandes');
     Route::post('/comptable/refuser/demande/{demande}', [DemandeController::class, 'refuser'])->name('refuser.demandes');
 
@@ -116,6 +123,9 @@ Route::middleware('checkrole:Comptable')->group(function (){
 //Employe
 Route::middleware('checkrole:Employe')->group(function (){
     Route::get('/employe/index/demande', [DemandeController::class, 'indexUserDemande'])->name('indexemploye.demandes');
+    //indexRessourceEmploye
+    Route::get('/employe/index/ressource', [RessourceController::class, 'indexUserRessource'])->name('indexemploye.ressources');
+
 
 });
 
@@ -128,7 +138,7 @@ Route::middleware(['checkrole:Admin,Comptable'])->group(function (){
     Route::get('/index/ressource', [RessourceController::class, 'index'])->name('index.ressources');
     //caisse
     //Route::get('/comptable/create/caisse', [caisseController::class, 'create'])->name('create.caisse');
-    Route::post('/store/caisse', [caisseController::class, 'store'])->name('store.caisse');
+    //Route::post('/store/caisse', [caisseController::class, 'store'])->name('store.caisse');
     Route::get('/index/caisse', [caisseController::class, 'index'])->name('index.caisse');
     //Route::get('/comptable/edit/caisse/{caisse}', [caisseController::class, 'edit'])->name('edit.caisse');
     Route::put('/update/caisse/{caisse}', [caisseController::class, 'update'])->name('update.caisse');

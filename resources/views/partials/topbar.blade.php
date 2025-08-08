@@ -42,7 +42,7 @@
 
 {{--                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>--}}
                 @forelse($notifications->where('is_read',false) as $notif)
-                    <a class="dropdown-item d-flex align-items-center " href="#">
+                    <a class="dropdown-item d-flex align-items-center " >
                         <div class="mr-3">
                             <div class="icon-circle bg-success">
                                 <i class="fas fa-info text-white"></i>

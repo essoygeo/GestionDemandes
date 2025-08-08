@@ -11,10 +11,10 @@
                 var fileDivContent = `
                     <label for="${fileUploadId}" class="file-upload">
                         <div>
-                            <i class="material-icons-outlined">cloud_upload</i>
-                            <p>Drag & Drop Files Here</p>
-                            <span>OR</span>
-                            <div>Browse Files</div>
+<!--                            <i class="material-icons-outlined"></i>-->
+<!--                            <p></p>-->
+<!--                            <span>OR</span>-->
+                            <div>upload</div>
                         </div>
                         <input type="file" id="${fileUploadId}" name="files[]" multiple hidden />
                     </label>

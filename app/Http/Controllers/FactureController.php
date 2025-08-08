@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Facture;
+use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class FactureController extends Controller
@@ -26,6 +29,17 @@ class FactureController extends Controller
         }
 
         $facture->delete();
+        //notif de suppression
+        $users = User::whereIn('role', ['Admin', 'Comptable'])->get();
+        $current = Auth::user();
+        foreach ($users as $user) {
+            Notification::create([
+                'user_id' => $user->id,
+                'message' => "une facture a été suprimée de la demande #{$facture->demande_id} par  l'utilisateur {$current->nom}",
+
+            ]);
+        }
+
 
         return response()->json(['message' => 'Facture supprimée avec succès']);
     }
@@ -52,6 +66,16 @@ class FactureController extends Controller
                 'demande_id'=>$request->demande_id
 
             ];
+
+        }
+        $users = User::whereIn('role', ['Admin', 'Comptable'])->get();
+        $current = Auth::user();
+        foreach ($users as $user) {
+            Notification::create([
+                'user_id' => $user->id,
+                'message' => "une facture a été ajoutée à la demande #{$request->demande_id} par  l'utilisateur {$current->nom}",
+
+            ]);
         }
 
         // Store images in the database using create method
