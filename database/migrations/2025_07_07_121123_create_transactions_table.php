@@ -19,11 +19,7 @@ return new class extends Migration
                 ->on('users')
                 ->onDelete('cascade');
 
-            $table->unsignedBigInteger('caisse_id');
-            $table->foreign('caisse_id')
-                ->references('id')
-                ->on('caisses')
-                ->onDelete('cascade');
+
 
             $table->unsignedBigInteger('demande_id')->nullable();
             $table->foreign('demande_id')

@@ -30,7 +30,7 @@
         </div>
     </div>
     <div class="row-gap-md-2">
-        <div class="card shadow-sm border-0">
+        <div class="card shadow-sm border-0 mb-3">
             <div class="card-header bg-white">
                 <h5 class="mb-3">Historique de caissse</h5>
                 {{--                <a class="mb-0 btn btn-sm btn-outline-success " href="#" data-bs-toggle="modal" data-bs-target="#showModalTransaction">voir historique caisse</a>--}}
@@ -47,13 +47,13 @@
                     <table class="table table-hover  align-middle" id="dataTable">
                         <thead class="table-light">
                         <tr>
-                            <th class="text-primary-emphasis">N°</th>
-                            <th class="text-primary-emphasis">Opérateur</th>
-                            <th class="text-primary-emphasis">Type transaction</th>
-                            <th class="text-primary-emphasis">Motif</th>
-                            <th class="text-primary-emphasis">Montant</th>
-                            <th class="text-primary-emphasis">Date</th>
-                            <th class="text-primary-emphasis">Demande associée</th>
+                            <th class="text-primary-emphasis text-center align-middle">N°</th>
+                            <th class="text-primary-emphasis text-center align-middle">Opérateur</th>
+                            <th class="text-primary-emphasis text-center align-middle">Type transaction</th>
+                            <th class="text-primary-emphasis text-center align-middle">Motif</th>
+                            <th class="text-primary-emphasis text-center align-middle">Montant </th>
+                            <th class="text-primary-emphasis text-center align-middle">Date</th>
+                            <th class="text-primary-emphasis text-center align-middle">Demande associée</th>
                         </tr>
                         </thead>
                         <tbody>

@@ -2,7 +2,7 @@
 @section('title','Liste de mes demandes')
 
 @section('content')
-    <div class="card shadow-sm border-0">
+    <div class="card shadow-sm border-0 mb-3">
         <div class="card-header bg-white">
             <h5 class="mb-3">Liste de mes demandes</h5>
             <a class="mb-0 btn btn-sm btn-outline-success " href="{{route('create.demandes')}}">+ Creer demande</a>

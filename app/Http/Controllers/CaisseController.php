@@ -58,7 +58,6 @@ class CaisseController extends Controller
 
         if ($caisse && $validated['montant_init'] >0 ) {
             $caisse->update([
-                'user_id' => Auth::id(),
                 'montant_init' => $validated['montant_init'] + $montant,
 
             ]);
@@ -66,7 +65,6 @@ class CaisseController extends Controller
 
             Transaction::create([
                 'user_id' => Auth::id(),
-                'caisse_id' => $caisse->id,
                 'montant_transaction' => $validated['montant_init'],
                 'type' => 'Entree',
                 'motif' => 'Entrée du montant de caisse',

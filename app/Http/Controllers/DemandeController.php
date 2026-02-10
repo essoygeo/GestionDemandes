@@ -304,7 +304,6 @@ class DemandeController extends Controller
                         }
                         Transaction::create([
                             'user_id' => Auth::id(),
-                            'caisse_id' => $caisse->id,
                             'demande_id' => $demande->id,
                             'montant_transaction' => $ressource->pivot->estimation_montant,
                             'type' => 'Sortie',

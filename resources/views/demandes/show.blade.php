@@ -109,6 +109,11 @@
                             <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Model</th>
                             <th class="text-primary-emphasis text-center align-middle" style="width: 120px;">Coût
                                 estimé
+                                <i class="fas fa-info-circle fa-xs text-success"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="Montant ajustable selon la demande.">
+                                </i>
                             </th>
                             <th class="text-primary-emphasis text-center align-middle" style="width: 200px;">Date
                                 creation
@@ -129,7 +134,7 @@
                                 <td class="text-center align-middle">{{$ressource->categorie->nom}}</td>
                                 <td class="text-center align-middle">{{$ressource->nom}}</td>
                                 <td class="text-center align-middle">
-                                    @if(strcasecmp($ressource->categorie->nom, 'logicielle') === 0)
+                                    @if(in_array(strtolower($ressource->categorie->nom), ['logicielle','logiciel','logicielles','logiciels']))
                                         <small class="text-primary-emphasis">pas de marque</small>
                                     @else
 
@@ -138,7 +143,7 @@
 
                                 </td>
                                 <td class="text-center align-middle">
-                                    @if(strcasecmp($ressource->categorie->nom, 'logicielle') === 0)
+                                    @if(in_array(strtolower($ressource->categorie->nom), ['logicielle','logiciel','logicielles','logiciels']))
                                         <small class="text-primary-emphasis">pas de model</small>
                                     @else
                                         {{$ressource->model  }}
@@ -184,7 +189,7 @@
                                                 </li>
 
                                                 {{-- Boutons conditionnels --}}
-                                                @if(Auth::user()->role === 'Admin' || Auth::user()->role === 'Employe')
+                                                @if(  Auth::user()->role === 'Employe' && $ressource->user_id == Auth::id() ||  Auth::user()->role === 'Admin')
                                                     @if($demande->status === 'En attente')
                                                         <li>
                                                             <a class="dropdown-item"
@@ -240,7 +245,7 @@
                                                 @endif
                                             </ul>
                                         </div>
-                                        @if(Auth::user()->role === 'Comptable' && $demande->status === 'En attente' && $demande->user_id === Auth::id())
+                                        @if(Auth::user()->role === 'Comptable' && $demande->status === 'En attente' && $ressource->user_id === Auth::id())
                                             <button type="button"
                                                     class="btn btn-sm btn-outline-success"
                                                     data-bs-toggle="modal"

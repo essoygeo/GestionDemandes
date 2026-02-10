@@ -16,13 +16,12 @@ class CaisseSeeder extends Seeder
     {
        $caisse = Caisse::create([
             'montant_init' => 0,
-            'user_id' => 1
+
         ]);
 
 
         Transaction::create([
             'user_id' => 1,
-            'caisse_id' => $caisse->id,
             'montant_transaction' => $caisse->montant_init,
             'type' => 'Entree',
             'motif' => 'Initialisation de la caisse',

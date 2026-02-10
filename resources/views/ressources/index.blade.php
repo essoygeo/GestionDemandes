@@ -53,7 +53,7 @@
                             <td class="text-center align-middle">{{$ressource->categorie->nom}}</td>
                             <td class="text-center align-middle">{{$ressource->nom}}</td>
                             <td class="text-center align-middle">
-                                @if(strcasecmp($ressource->categorie->nom, 'logicielle') === 0)
+                                @if(in_array(strtolower($ressource->categorie->nom), ['logicielle','logiciel','logicielles','logiciels']))
                                     <small class="text-primary-emphasis">pas de model</small>
                                 @else
                                     {{$ressource->marque}}
@@ -61,7 +61,7 @@
 
                             </td>
                             <td class="text-center align-middle">
-                                @if(strcasecmp($ressource->categorie->nom, 'logicielle') === 0)
+                                @if(in_array(strtolower($ressource->categorie->nom), ['logicielle','logiciel','logicielles','logiciels']))
                                     <small class="text-primary-emphasis">pas de marque</small>
                                 @else
                                     {{$ressource->model}}

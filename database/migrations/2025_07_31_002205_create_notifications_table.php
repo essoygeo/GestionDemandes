@@ -11,14 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('caisses', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
 
-            $table->decimal('montant_init',10,2);
 
 
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
+            $table->text('message');
+
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
+
+
     }
 
     /**
@@ -26,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('caisses');
+        Schema::dropIfExists('notifications');
     }
 };

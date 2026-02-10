@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Caisse extends Model
 {
-    protected $fillable = ['user_id','montant_init'];
+    protected $fillable = ['montant_init'];
 
     public function user()
     {
