@@ -1,26 +1,26 @@
-Fonctionnalités
+# GestionDemandes
 
-Gestion des utilisateurs et rôles : employé, comptable, directeur/admin.
+**GestionDemandes** est une application web qui permet de gérer efficacement les demandes de ressources matérielles ou logicielles au sein d’une startup ou d’une PME.  
 
-Création et suivi des demandes : ajout de ressources, suivi du statut (en attente, validée, refusée).
+Cette plateforme modernise l’approche traditionnelle des demandes (emails envoyés aux responsables ou formulaires papier) en offrant :  
+- Une interface centralisée pour créer et suivre les demandes.  
+- Un système de validation et de suivi automatisé.  
+- Une gestion claire des ressources disponibles.  
+- Des notifications pour informer les utilisateurs de l’avancement de leurs demandes.  
 
-Gestion de la caisse : mise à jour automatique selon les demandes validées, suivi des dépenses et justificatifs.
+---
 
-Notifications : alertes pour validation, refus ou modification de demandes.
+## Technologies utilisées
 
-Historique et statistiques : suivi complet des activités et rapports sur la caisse et les demandes.
+- **Back-end :** Laravel (PHP)  
+- **Front-end :** Blade  
+- **Base de données :** MySQL  
 
-Sécurité : authentification, gestion des rôles et permissions.
+---
 
+## Installation et configuration
 
-Installation
-
-1.Cloner le dépôt :
+1. **Cloner le dépôt :**
+```bash
 git clone https://github.com/essoygeo/GestionDemandes.git
-2.Installer les dépendances :
-composer install
-3.Configurer .env pour la connexion à la base de données.
-4.Lancer les migrations et seeders :
-php artisan migrate --seed
-
-
+cd GestionDemandes
